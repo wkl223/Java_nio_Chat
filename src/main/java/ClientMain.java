@@ -96,6 +96,7 @@ public class ClientMain {
                 if(isCommand(message)){
                     //TODO: command logic
                     String[] res = message.split(":");
+                    System.out.println("in system username: "+res);
                     setUserName(res[1]);
                 }
             } catch (IOException e) {

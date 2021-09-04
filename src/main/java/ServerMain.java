@@ -53,9 +53,9 @@ public class ServerMain {
     }
     return null;
   }
-  private void singleResponse(String message, String name, Selector selector){
+  private synchronized void singleResponse(String message, String name, Selector selector){
     ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
-//    message += "\r\n"; // append new line
+    //message += "\r\n"; // append new line
     byteBuffer.put(message.getBytes(StandardCharsets.UTF_8));
     byteBuffer.flip();
     SocketChannel socketChannel = (SocketChannel) getKey(selector,name).channel();
@@ -113,9 +113,9 @@ public class ServerMain {
     curClients.add(name);
     chatRoom.remove(room);
     chatRoom.put(room,curClients);
-    broadCast("New client: "+ name+ " has joined to room: "+room,null,selector,selectionKey);
-    System.out.println("New client: "+ name+ " has joined to room: "+room);
     singleResponse("#new_identity:"+name, name, selector);
+    System.out.println("New client: "+ name+ " has joined to room: "+room);
+    broadCast("New client: "+ name+ " has joined to room: "+room,null,selector,selectionKey);
     return 0;
   }
   public void handle(int port) {
