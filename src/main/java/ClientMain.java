@@ -1,5 +1,4 @@
 import java.io.IOException;
-import java.net.ConnectException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.ClosedChannelException;
@@ -9,7 +8,6 @@ import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.StringTokenizer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -92,11 +90,11 @@ public class ClientMain {
                 b.flip();
                 String message = String.valueOf(StandardCharsets.UTF_8.decode(b));
                 b.clear();
-                System.out.println("got message from server: "+message);
+                System.out.println("DEBUG server msg: "+message);
                 if(isCommand(message)){
                     //TODO: command logic
                     String[] res = message.split(":");
-                    System.out.println("in system username: "+res);
+                    System.out.println("DEBUG: in system username: "+res);
                     setUserName(res[1]);
                 }
             } catch (IOException e) {

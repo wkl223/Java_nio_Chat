@@ -158,7 +158,7 @@ public class ServerMain {
       try{
         SocketChannel socketChannel = ((ServerSocketChannel)selectionKey.channel()).accept();
         if(socketChannel!=null) {
-          System.out.println("client connection established: " + socketChannel.socket().getPort());
+          System.out.println("DEBUG: client connection established: " + socketChannel.socket().getPort());
           //set unblocking mode
           socketChannel.configureBlocking(false);
           // register the client to the selector for event monitoring. attach Username.
@@ -183,7 +183,7 @@ public class ServerMain {
           }
           b.flip(); //reset the cursor at 0.
           String message = String.valueOf(StandardCharsets.UTF_8.decode(b));
-          System.out.println("received client message: " + message);
+          System.out.println("DEBUG: received client message: " + message);
           //TODO: quit logic implementation
           broadCast(message,null,selector,selectionKey);
           b.clear();
