@@ -9,10 +9,10 @@ class MessageTest {
     static ObjectMapper mapper=new ObjectMapper();
     String testMessage="Hello World!";
     String type = "chat";
-    String sender = "me";
+    String identity = "me";
     String room = "MainH";
-    String jsonMessage="{\"message\":\""+testMessage+"\",\"type\":\""+type+"\",\"sender\":\""+sender+"\"}";
-    String jsonMessageWithRoom="{\"message\":\""+testMessage+"\",\"type\":\""+type+"\",\"sender\":\""+sender+"\",\"room\":\""+room+"\"}";
+    String jsonMessage="{\"message\":\""+testMessage+"\",\"type\":\""+type+"\",\"sender\":\""+ identity +"\"}";
+    String jsonMessageWithRoom="{\"message\":\""+testMessage+"\",\"type\":\""+type+"\",\"sender\":\""+ identity +"\",\"room\":\""+room+"\"}";
     @Test
     @DisplayName("Simple get message")
     void getMessage() throws JsonProcessingException {
@@ -33,7 +33,7 @@ class MessageTest {
     @DisplayName("Simple get sender")
     void getSender() throws JsonProcessingException {
         Message value = mapper.readValue(jsonMessage, Message.class);
-        assert(value.getSender().equals(sender));
+        assert(value.getIdentity().equals(identity));
     }
 
     @Test
@@ -50,7 +50,7 @@ class MessageTest {
         ArrayList<String> msg = new ArrayList<>();
         msg.add(Message.transformMessagePairs(Message.MESSAGE_HEAD,testMessage));
         msg.add(Message.transformMessagePairs(Message.TYPE_HEAD,type));
-        msg.add(Message.transformMessagePairs(Message.SENDER_HEAD,sender));
+        msg.add(Message.transformMessagePairs(Message.SENDER_HEAD, identity));
         msg.add(Message.transformMessagePairs(Message.ROOM_HEAD,room));
         String transformedJson=Message.jsonCompose(msg);
         System.out.println("original message:"+jsonMessageWithRoom);
@@ -59,7 +59,7 @@ class MessageTest {
         //transform it back by Jackson
         Message value = mapper.readValue(transformedJson, Message.class);
         assert(value.getRoom().equals(room));
-        assert(value.getSender().equals(sender));
+        assert(value.getIdentity().equals(identity));
         assert(value.getType().equals(type));
         assert(value.getMessage().equals(testMessage));
     }
