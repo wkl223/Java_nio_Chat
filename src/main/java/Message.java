@@ -1,11 +1,16 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class Message {
     private String type;
-    private String message;
+    private String content;
     private String identity;
     private String room;
     private String former;
+    private String sender;
+    private String roomid;
+    private String count;
+    private String rooms;
     // message head constant
     public static final String MESSAGE_HEAD = "content";
     public static final String TYPE_HEAD = "type";
@@ -14,9 +19,13 @@ public class Message {
     public static final String ROOM_DESTINATION_HEAD ="roomid";
     public static final String COUNT_HEAD = "count";
     public static final String ROOM_LIST_HEAD ="rooms";
+    public static final String FORMER_HEAD ="former";
+    public static final String IDENTITY_HEAD ="identity";
+    public static final String EMPTY = "";
     // type constant
     public static final String TYPE_QUIT = "quit";
     public static final String TYPE_NEW_IDENTITY = "newidentity";
+    public static final String TYPE_IDENTITY_CHANGE = "identitychange";
     public static final String TYPE_JOIN = "join";
     public static final String TYPE_ROOM_CONTENTS = "roomcontents";
     public static final String TYPE_OWNER = "owner";
@@ -24,24 +33,31 @@ public class Message {
     public static final String TYPE_ROOM_LIST = "roomlist";
     public static final String TYPE_ROOM_CREATION = "createroom";
     public static final String TYPE_DELETE = "delete";
+    public static final String TYPE_LIST = "list";
+    public static final String TYPE_ROOM_CHANGE ="roomchange";
     // delimiters and marks
     public static final String KV_DELIMITER = ":";
     public static final String TUPLE_DELIMITER =",";
     public static final String ROOM_OWNER_MARK ="*";
 
-    public String getMessage(){
-        return this.message;
+    public String getContent(){
+        return this.content;
     }
     public String getType(){
         return this.type;
     }
-    public String getIdentity(){
-        return this.identity;
-    }
+    public String getIdentity(){return this.identity;}
     public String getRoom(){
         return this.room;
     }
-
+    public String getSender(){return this.sender;}
+    public String getFormer(){return this.former;}
+    public String getRoomid(){return this.roomid;}
+    public String getCount(){return this.count;}
+    //public ArrayList<String> getRooms(){}
+    public String getRooms(){
+        return this.rooms;
+    }
     public static String addHeadAndTail(String message, String head, String tail){
         String out = message;
         out = head+out+tail;

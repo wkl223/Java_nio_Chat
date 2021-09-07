@@ -17,6 +17,7 @@ public class ServerMain {
   private static final ExecutorService THREAD_POOL = Executors.newFixedThreadPool(10);
   private static final String host = "127.0.0.1";
   private static ConcurrentHashMap chatRoom; //<key=RoomName, value=list of clients>
+  private static ConcurrentHashMap roomProperty; //<key=RoomName, value=owner>
   private static final String DEFAULT_ROOM = "MainHall";
   private static ConcurrentHashMap clients; //<key=clientName, value=current room>
   private static List<String> freeName = new ArrayList<String>();//
@@ -130,8 +131,10 @@ public class ServerMain {
       serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
       System.out.println("server is up at port: "+ port);
       chatRoom = new ConcurrentHashMap<String, ArrayList<String>>();
+      roomProperty = new ConcurrentHashMap<String,String>();
       //create default chatRoom
       chatRoom.put(DEFAULT_ROOM,new ArrayList<String>());
+      roomProperty.put(DEFAULT_ROOM,null);
       clients = new ConcurrentHashMap<String,SelectionKey>();
       while(true){
         int eventCountTriggered = selector.select();
