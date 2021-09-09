@@ -3,9 +3,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 class MessageTest {
     static ObjectMapper mapper=new ObjectMapper();
@@ -15,10 +15,19 @@ class MessageTest {
     String room = "MainH";
     String jsonMessage="{\"content\":\""+testMessage+"\",\"type\":\""+type+"\",\"identity\":\""+ identity +"\"}";
     String jsonMessageWithRoom="{\"content\":\""+testMessage+"\",\"type\":\""+type+"\",\"identity\":\""+ identity +"\",\"room\":\""+room+"\"}";
-    static void generateRooms(Map<String,String> map){
+    static void generateRooms(List<RoomList> rooms){
         for(int i =0; i < 10; i++){
-            map.put("TEST_ROOM"+i,"Test_admin"+i);
+            rooms.add(new RoomList("TEST_ROOM"+i,String.valueOf(i)));
         }
+    }
+    static int findAndRemoveRoom(List<RoomList> rooms, String target){
+        for(RoomList r : rooms){
+            if(r.getRoomId().equals(target)) {
+                rooms.remove(r);
+                return 1;
+            }
+        }
+        return -1;
     }
     @Test
     @DisplayName("Simple get message")
@@ -135,7 +144,7 @@ class MessageTest {
         System.out.println("CLIENT: Join room message:"+transformedJson);
         //SERVER: receive and decode it
         Message value = mapper.readValue(transformedJson, Message.class);
-        assert(value.getRoomid().equals(newRoom));
+        assert(value.getRoomId().equals(newRoom));
         assert(value.getType().equals(Message.TYPE_JOIN));
         //SERVER: respond message
         msg = new ArrayList<>();
@@ -151,47 +160,43 @@ class MessageTest {
         assert(value.getIdentity().equals(identity));
         assert(value.getType().equals(Message.TYPE_ROOM_CHANGE));
         assert(value.getFormer().equals(formerRoom));
-        assert(value.getRoomid().equals(newRoom));
+        assert(value.getRoomId().equals(newRoom));
     }
     @Test
     @DisplayName("Client request for delete room")
-    void clientRequestDelete() throws JsonProcessingException {
+    void clientRequestDelete() throws IOException {
         //CLIENT: send delete message
         ArrayList<String> msg = new ArrayList<>();
         String identity = "Test_admin1";//get name from key attachment
-//        String fake_identity = "Testttttt";
         String roomId = "TEST_ROOM1";//retrieve by identity
-        Map<String,String> roomProperties = new HashMap<>();
+        List<RoomList> roomProperties = new ArrayList<>();
         msg.add(Message.transformMessagePairs(Message.TYPE_HEAD,Message.TYPE_DELETE));
         msg.add(Message.transformMessagePairs(Message.ROOM_DESTINATION_HEAD,roomId));
         String transformedJson=Message.jsonCompose(msg);
         System.out.println("CLIENT: Delete room message:"+transformedJson);
         generateRooms(roomProperties);
-        System.out.println(roomProperties);
-        //SERVER: respond
-
+        System.out.println("SERVER: CURRENT ROOM LIST:"+roomProperties.toString());
 
         //SERVER: receive and decode it
         Message value = mapper.readValue(transformedJson, Message.class);
-        assert(value.getRoomid().equals(roomId));
-        assert(value.getType().equals(Message.TYPE_JOIN));
+        assert(value.getRoomId().equals(roomId));
+        assert(value.getType().equals(Message.TYPE_DELETE));
         //TODO:check identity and room availability
         // we don't check this in here.
-        roomProperties.remove(roomId);
+        findAndRemoveRoom(roomProperties,roomId);
         //SERVER: respond message
-        //TODO: ROOMLIST
         msg = new ArrayList<>();
-        msg.add(Message.transformMessagePairs(Message.TYPE_HEAD,Message.TYPE_DELETE));
-        msg.add(Message.transformMessagePairs(Message.ROOM_DESTINATION_HEAD,roomId));
+        msg.add(Message.transformMessagePairs(Message.TYPE_HEAD,Message.TYPE_ROOM_LIST));
+        msg.add(Message.transformListPairs(Message.ROOM_LIST_HEAD,Message.roomListToJson(roomProperties)));
 
         transformedJson=Message.jsonCompose(msg);
         System.out.println("SERVER: Join room respond:"+transformedJson);
         //CLIENT: transform it back by Jackson
+
         value = mapper.readValue(transformedJson, Message.class);
-        assert(value.getIdentity().equals(identity));
-        assert(value.getType().equals(Message.TYPE_ROOM_CHANGE));
-        assert(value.getFormer().equals(formerRoom));
-        assert(value.getRoomid().equals(newRoom));
+        System.out.println(value.getRooms());
+        assert(value.getType().equals(Message.TYPE_ROOM_LIST));
+        assert(!value.getRooms().toString().contains(roomId));
     }
     @Test
     @DisplayName("Client request for room list")
