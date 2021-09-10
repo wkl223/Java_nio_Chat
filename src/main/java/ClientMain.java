@@ -56,9 +56,18 @@ public class ClientMain {
                         while (!Thread.currentThread().isInterrupted()) {
                             byteBuffer.clear();
                             String message = new Scanner(System.in).nextLine();
-                            byteBuffer.put(String.format("[%s]: %s", userName, message).getBytes(StandardCharsets.UTF_8));
-                            byteBuffer.flip();
+                            Message m = new Message();
+                            if (isCommand(message)){
+                                // for command
+                            }
+                            else{
+                                m.setType(Message.TYPE_MESSAGE);
+                                m.setContent(message);
+                            }
                             try {
+                                byteBuffer.put(new Protocol(m).encodeJson().getBytes(StandardCharsets.UTF_8));
+                                byteBuffer.flip();
+                                System.out.println("DEBUG: "+String.format("[%s]: %s", userName, message));
                                 while (byteBuffer.hasRemaining()) {
                                     socketChannel.write(byteBuffer);
                                 }
@@ -77,7 +86,6 @@ public class ClientMain {
                     });
                 }
             } catch (IOException e) {
-                //e.printStackTrace();
                 System.err.println("ERROR - Cannot connect to server!!");
                 System.exit(-1);
             }

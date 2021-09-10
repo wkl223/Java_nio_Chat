@@ -184,15 +184,15 @@ class MessageTest {
         //TODO:check identity and room availability
         // we don't check this in here.
         findAndRemoveRoom(roomProperties,roomId);
+
         //SERVER: respond message
         msg = new ArrayList<>();
         msg.add(Message.transformMessagePairs(Message.TYPE_HEAD,Message.TYPE_ROOM_LIST));
         msg.add(Message.transformListPairs(Message.ROOM_LIST_HEAD,Message.roomListToJson(roomProperties)));
-
         transformedJson=Message.jsonCompose(msg);
         System.out.println("SERVER: Join room respond:"+transformedJson);
-        //CLIENT: transform it back by Jackson
 
+        //CLIENT: transform it back by Jackson
         value = mapper.readValue(transformedJson, Message.class);
         System.out.println(value.getRooms());
         assert(value.getType().equals(Message.TYPE_ROOM_LIST));
@@ -200,8 +200,29 @@ class MessageTest {
     }
     @Test
     @DisplayName("Client request for room list")
-    void clientRequestRoomList(){
-        //
+    void clientRequestRoomList() throws IOException {
+        List<RoomList> roomProperties = new ArrayList<>();
+        generateRooms(roomProperties);
+        System.out.println("SERVER: CURRENT ROOM LIST:"+roomProperties.toString());
+
+        //CLIENT: REQUEST FOR ROOM LIST
+        ArrayList<String> msg = new ArrayList<>();
+        String identity = "Test_admin1";//get name from key attachment
+        msg.add(Message.transformMessagePairs(Message.TYPE_HEAD,Message.TYPE_LIST));
+        String transformedJson=Message.jsonCompose(msg);
+        System.out.println("CLIENT: List room message:"+transformedJson);
+
+        //SERVER: RECEIVE REQUEST AND DECODE, THEN RESPOND WITH THE LIST
+        msg = new ArrayList<>();
+        msg.add(Message.transformMessagePairs(Message.TYPE_HEAD,Message.TYPE_ROOM_LIST));
+        msg.add(Message.transformListPairs(Message.ROOM_LIST_HEAD,Message.roomListToJson(roomProperties)));
+        transformedJson=Message.jsonCompose(msg);
+        System.out.println("SERVER: Join room respond:"+transformedJson);
+
+        Message value = mapper.readValue(transformedJson, Message.class);
+        System.out.println(value.getRooms());
+        assert(value.getType().equals(Message.TYPE_ROOM_LIST));
+        assert(value.getRooms().toString().contains(roomProperties.get(0).getRoomId()));
     }
     @Test
     @DisplayName("Client request for roommates info")
