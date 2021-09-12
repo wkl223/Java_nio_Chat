@@ -1,3 +1,5 @@
+import Protocol.Message;
+import Protocol.Entity.Room;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -15,13 +17,13 @@ class MessageTest {
     String room = "MainH";
     String jsonMessage="{\"content\":\""+testMessage+"\",\"type\":\""+type+"\",\"identity\":\""+ identity +"\"}";
     String jsonMessageWithRoom="{\"content\":\""+testMessage+"\",\"type\":\""+type+"\",\"identity\":\""+ identity +"\",\"room\":\""+room+"\"}";
-    static void generateRooms(List<RoomList> rooms){
+    static void generateRooms(List<Room> rooms){
         for(int i =0; i < 10; i++){
-            rooms.add(new RoomList("TEST_ROOM"+i,String.valueOf(i)));
+            rooms.add(new Room("TEST_ROOM"+i,String.valueOf(i)));
         }
     }
-    static int findAndRemoveRoom(List<RoomList> rooms, String target){
-        for(RoomList r : rooms){
+    static int findAndRemoveRoom(List<Room> rooms, String target){
+        for(Room r : rooms){
             if(r.getRoomId().equals(target)) {
                 rooms.remove(r);
                 return 1;
@@ -80,7 +82,7 @@ class MessageTest {
         assert(value.getContent().equals(testMessage));
     }
     /*
-    Note: Below should be Protocol tests, but write tests beforehand will help my actual software implementation
+    Note: Below should be Protocol.Protocol tests, but write tests beforehand will help my actual software implementation
     and that's why I leave them here below. The protocol tests may not be implemented formally. Not sure
     if i have got time or not.
     ---Caleb
@@ -169,7 +171,7 @@ class MessageTest {
         ArrayList<String> msg = new ArrayList<>();
         String identity = "Test_admin1";//get name from key attachment
         String roomId = "TEST_ROOM1";//retrieve by identity
-        List<RoomList> roomProperties = new ArrayList<>();
+        List<Room> roomProperties = new ArrayList<>();
         msg.add(Message.transformMessagePairs(Message.TYPE_HEAD,Message.TYPE_DELETE));
         msg.add(Message.transformMessagePairs(Message.ROOM_DESTINATION_HEAD,roomId));
         String transformedJson=Message.jsonCompose(msg);
@@ -201,7 +203,7 @@ class MessageTest {
     @Test
     @DisplayName("Client request for room list")
     void clientRequestRoomList() throws IOException {
-        List<RoomList> roomProperties = new ArrayList<>();
+        List<Room> roomProperties = new ArrayList<>();
         generateRooms(roomProperties);
         System.out.println("SERVER: CURRENT ROOM LIST:"+roomProperties.toString());
 

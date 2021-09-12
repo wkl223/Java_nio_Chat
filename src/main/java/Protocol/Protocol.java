@@ -1,21 +1,17 @@
-import com.fasterxml.jackson.core.JsonParser;
+package Protocol;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.ObjectCodec;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.StringJoiner;
 
 public class Protocol {
     static ObjectMapper mapper = new ObjectMapper();
     public static final String INVALID_JSON = "INVALID";
-    Message m;
-
+    public static final String SUCCESS = "Done";
+    private Message m;
     public Protocol(String message) {
         try {
             m = mapper.readValue(message, Message.class);
@@ -31,11 +27,40 @@ public class Protocol {
     public Protocol(Message m){
         this.m = m;
     }
-
+    public Message getMessage(){return m;}
+    public String getType(){return m.getType();}
+    // same as getMessage, but with extra check for the receiver side.
+    public Message decodeJson() throws IOException{
+        if (isValidType()){
+            return m;
+        }
+        return new Message();
+    }
+    // Message object to String that's ready to send.
     public String encodeJson() throws IOException {
         final ObjectMapper mapper = new ObjectMapper();
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        switch (m.getType()){
+        if (isValidType())
+        {
+                mapper.writeValue(out,m);
+                return new String(out.toByteArray());
+        }
+        return INVALID_JSON;
+    }
+    public static boolean isValidCommandType(String input){
+        switch (input){
+            case Message.TYPE_WHO:
+            case Message.TYPE_ROOM_CREATION:
+            case Message.TYPE_LIST:
+            case Message.TYPE_DELETE:
+            case Message.TYPE_QUIT:
+                return true;
+            default:
+                return false;
+        }
+    }
+    public static boolean isValidType(String input){
+        switch (input){
             case Message.TYPE_DELETE:
             case Message.TYPE_JOIN:
             case Message.TYPE_NEW_IDENTITY:
@@ -46,12 +71,15 @@ public class Protocol {
             case Message.TYPE_ROOM_CREATION:
             case Message.TYPE_ROOM_CHANGE:
             case Message.TYPE_ROOM_LIST:
+            case Message.TYPE_WHO:
             case Message.TYPE_MESSAGE:
-                mapper.writeValue(out,m);
-                return new String(out.toByteArray());
+                return true;
             default:
-                return INVALID_JSON;
+                return false;
         }
+    }
+    public boolean isValidType() throws IOException{
+        return isValidType(m.getType());
     }
 
 

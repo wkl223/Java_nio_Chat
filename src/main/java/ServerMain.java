@@ -1,5 +1,9 @@
+import Logic.ServerReception;
+import Protocol.Entity.Room;
+import Logic.ServerResponds;
+import Protocol.*;
+
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
@@ -9,7 +13,6 @@ import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -18,12 +21,13 @@ import java.util.concurrent.Executors;
 public class ServerMain {
   private static final ExecutorService THREAD_POOL = Executors.newFixedThreadPool(10);
   private static final String host = "127.0.0.1";
-  private static ConcurrentHashMap<String, ArrayList<String>> chatRoom; //<key=RoomName, value=list of clients>
-  private static ConcurrentHashMap<String, String> roomProperty; //<key=RoomName, value=owner>
-  private static final String DEFAULT_ROOM = "MainHall";
+//  private static ConcurrentHashMap<String, ArrayList<String>> chatRoom; //<key=RoomName, value=list of clients>
+//  private static ConcurrentHashMap<String, String> roomProperty; //<key=RoomName, value=owner>
+  private static List<Room> chatRoom;
   private static ConcurrentHashMap clients; //<key=clientName, value=current room>
   private static List<String> freeName = new ArrayList<String>();//
-  private static int ClientCount = 1;
+
+  public static final String DEFAULT_ROOM = "MainHall";
 
   public static void main(String[] args) {
     int port =4444;//default to port 4444
@@ -94,49 +98,8 @@ public class ServerMain {
     }
     byteBuffer.clear();
   }
-  private synchronized String getAvailableClientName(){
-    if(freeName.size()>1)
-      return freeName.get(0);
-    else{
-      String name = "Guest"+ ClientCount;
-      ClientCount+=1;
-      return name;
-    }
-  }
 
-  private synchronized int joinRoom(Object client, Object roomName, Selector selector, SelectionKey selectionKey) throws IOException {
-    String name = (String)client;
-    String room = (String)roomName;
-    String former = (String) clients.get(name) == null ?"":(String) clients.get(name);
-    ArrayList<String> curClients = chatRoom.get(room);
-    if(curClients == null) return -1;
-    clients.put(name, room);
-    curClients.add(name);
-    chatRoom.remove(room);
-    chatRoom.put(room,curClients);
-    System.out.println("Debug: New client: "+ name+ " has joined to room: "+room);
-    //Server respond and broadcast
-    Message m = new Message();
-    m.setType(Message.TYPE_JOIN);
-    m.setIdentity(name);
-    m.setFormer(former);
-    m.setRoomId(room);
-    broadCast(new Protocol(m),curClients,selector,selectionKey);
-    m = new Message();
-    // room content
-    //m.setType(Message.TYPE_ROOM_CONTENTS);
-    //m.set
-    //singleResponse(new Protocol(m),name,selector);
-    // room list
-    m.setType(Message.TYPE_ROOM_LIST);
-    ArrayList<RoomList> tempRoomList = new ArrayList<>();
-    for(Map.Entry entry: chatRoom.entrySet()){
-        tempRoomList.add(new RoomList((String)entry.getKey(),String.valueOf(((ArrayList<String>)entry.getValue()).size())));
-    }
-    m.setRooms(tempRoomList);
-    singleResponse(new Protocol(m),name,selector);
-    return 0;
-  }
+
   public void handle(int port) {
     ServerSocketChannel serverSocketChannel;
 
@@ -148,11 +111,11 @@ public class ServerMain {
 
       serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
       System.out.println("server is up at port: "+ port);
-      chatRoom = new ConcurrentHashMap<String, ArrayList<String>>();
-      roomProperty = new ConcurrentHashMap<String,String>();
+      chatRoom = new ArrayList<Room>();
+//      roomProperty = new ConcurrentHashMap<String,String>();
       //create default chatRoom
-      chatRoom.put(DEFAULT_ROOM, new ArrayList<>());
-      roomProperty.put(DEFAULT_ROOM,"");
+      chatRoom.add(new Room(DEFAULT_ROOM,"0",""));
+//      roomProperty.put(DEFAULT_ROOM,"");
       clients = new ConcurrentHashMap<String,SelectionKey>();
       while(true){
         int eventCountTriggered = selector.select();
@@ -183,16 +146,13 @@ public class ServerMain {
           //set unblocking mode
           socketChannel.configureBlocking(false);
           // register the client to the selector for event monitoring. attach Username.
-          String clientName = getAvailableClientName();
+          Protocol respond = ServerResponds.newIdentity(clients,freeName, ServerResponds.NEW_USER_INDICATOR, ServerResponds.NEW_USER_INDICATOR);
+          String clientName = respond.getMessage().getIdentity();
           SelectionKey clientKey = socketChannel.register(selector, SelectionKey.OP_READ, clientName);
           // new identity assignment
-          Message m = new Message();
-          m.setType(Message.TYPE_NEW_IDENTITY);
-          m.setIdentity(clientName);
-          m.setFormer("");
-          singleResponse(new Protocol(m), clientName, selector);
+          singleResponse(respond, clientName, selector);
           // and assign it to the MainHall
-          joinRoom(clientName,DEFAULT_ROOM, selector ,clientKey);
+        //  joinRoom(clientName,DEFAULT_ROOM, selector ,clientKey);
 
         }
       }catch(IOException e){
@@ -201,7 +161,6 @@ public class ServerMain {
     }
     // otherwise, it is something the server can read.
     else if (selectionKey.isReadable()){
-      //TODO: protocol implementation
       SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
       if(socketChannel != null) {
         ByteBuffer b = ByteBuffer.allocate(1024); //1024 byte per read
@@ -213,13 +172,40 @@ public class ServerMain {
           String message = String.valueOf(StandardCharsets.UTF_8.decode(b));
           String client = (String)selectionKey.attachment();
           System.out.println("DEBUG: received client message: " + message+" from client:"+client);
-          //TODO: quit logic implementation
-          broadCast(new Protocol(message),chatRoom.get((String)clients.get(client)),selector,selectionKey);
+          //broadCast(new Protocol.Protocol(message),chatRoom.get((String)clients.get(client)),selector,selectionKey);
           b.clear();
         } catch (IOException e) {
           e.printStackTrace();
         }
       }
+    }
+  }
+  public void processMessageAndRespond(String message, String client, Selector selector) throws IOException {
+    //TODO: broadcast or single response logic per each message type.
+    Protocol p = new Protocol(message);
+    switch (p.decodeJson().getType()){
+      case Message.TYPE_DELETE:
+        ServerReception.deleteRoom(p,client,chatRoom);
+      case Message.TYPE_JOIN:
+        Protocol answer = ServerReception.joinRoom(p,client,clients,chatRoom);
+        if(answer.getMessage().getRoomId().equals(DEFAULT_ROOM)){
+          singleResponse(ServerResponds.roomContents(DEFAULT_ROOM,chatRoom),client,selector);
+          singleResponse(ServerResponds.roomList(chatRoom),client,selector);
+        }
+      case Message.TYPE_IDENTITY_CHANGE:
+        ServerReception.identityChange(p,client,clients,freeName,chatRoom);
+      case Message.TYPE_WHO:
+        ServerReception.who(p,client,chatRoom);
+      case Message.TYPE_QUIT:
+        ServerReception.quit(p,client,chatRoom,clients);
+      case Message.TYPE_LIST:
+        ServerReception.list(p,client,chatRoom);
+      case Message.TYPE_ROOM_CREATION:
+        ServerReception.createRoom(p,client,chatRoom);
+      case Message.TYPE_MESSAGE:
+        ServerReception.message(p,client);
+      default:
+        System.out.println("DEBUG - Something is wrong in reception service");
     }
   }
 

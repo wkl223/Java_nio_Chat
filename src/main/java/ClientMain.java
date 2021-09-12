@@ -1,3 +1,6 @@
+import Protocol.Message;
+import Protocol.Protocol;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -15,7 +18,12 @@ public class ClientMain {
     private static final ExecutorService USER_INPUT_HANDLER = Executors.newSingleThreadExecutor();
     public static final int port = 4456;
     public static final String host = "127.0.0.1";
+    public static final int VALID_MESSAGE =1;
+    public static final int INVALID_MESSAGE =-1;
+
     private String userName;
+    private String currentRoom;
+
     public void handle() {
         try {
             SocketChannel socketChannel = SocketChannel.open();
@@ -116,6 +124,7 @@ public class ClientMain {
         else return false;
     }
 
+
     public static void main(String[] args) {
         ClientMain client = new ClientMain();
         client.handle();
@@ -124,4 +133,5 @@ public class ClientMain {
     private void setUserName(String name) {
         this.userName=name;
     }
+    private void setCurrentRoom(String room){currentRoom=room;}
 }

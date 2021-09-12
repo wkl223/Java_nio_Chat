@@ -1,3 +1,7 @@
+package Protocol;
+
+import Protocol.Entity.Room;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -5,6 +9,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Message<T> {
@@ -13,11 +18,14 @@ public class Message<T> {
     private String identity;
     private String room;
     private String former;
-    private String sender;
+    private String owner;
     private String roomId;
-    //@JsonDeserialize(using = RoomListJsonDeserializer.class)
-    private List<RoomList> rooms;
-    private List<String> participants;
+    private Map<String,String> rooms;
+    private List<String> identities;
+    @JsonIgnore
+    private boolean isSuccessed;
+//    @JsonIgnore
+//    private List<Room> roomInfo; // actual Room object is not passed.
     // message head constant
     public static final String MESSAGE_HEAD = "content";
     public static final String TYPE_HEAD = "type";
@@ -25,7 +33,7 @@ public class Message<T> {
     public static final String ROOM_HEAD ="room";
     public static final String ROOM_DESTINATION_HEAD ="roomId";
     public static final String COUNT_HEAD = "count";
-    public static final String ROOM_LIST_HEAD ="rooms";
+    public static final String ROOM_LIST_HEAD ="roomInfo";
     public static final String FORMER_HEAD ="former";
     public static final String IDENTITY_HEAD ="identity";
     public static final String OWNER_HEAD = "owner";
@@ -56,23 +64,23 @@ public class Message<T> {
     public String getRoom(){
         return this.room;
     }
-    public String getSender(){return this.sender;}
+    public String getOwner(){return this.owner;}
     public String getFormer(){return this.former;}
     public String getRoomId(){return this.roomId;}
-    public List<RoomList> getRooms(){
-        return this.rooms;
-    }
-    public List<String> getParticipants(){return this.participants;}
+    public Map<String,String> getRooms(){return this.rooms;}
+//    public List<Room> getRoomInfo(){return this.roomInfo;}
+    public List<String> getParticipants(){return this.identities;}
 
     public void setType(String type) {this.type = type;}
     public void setContent(String content) {this.content = content;}
     public void setIdentity(String identity) {this.identity = identity;}
     public void setRoom(String room) {this.room = room;}
     public void setFormer(String former) {this.former = former;}
-    public void setSender(String sender) {this.sender = sender;}
+    public void setOwner(String owner) {this.owner = owner;}
     public void setRoomId(String roomId) {this.roomId = roomId;}
-    public void setRooms(List<RoomList> rooms) {this.rooms = rooms;}
-    public void setParticipants(List<String> participants) {this.participants = participants;}
+    public void setRooms(Map<String,String> rooms){this.rooms=rooms;}
+//    public void setRoomInfo(List<Room> roomInfo) {this.roomInfo = roomInfo;}
+    public void setParticipants(List<String> participants) {this.identities = participants;}
 
 
     public Message(){}//empty constructor
@@ -107,7 +115,7 @@ public class Message<T> {
         mapper.writeValue(out,m);
         return new String(out.toByteArray());
     }
-    public static String roomListToJson(List<RoomList> rooms) throws IOException {
+    public static String roomListToJson(List<Room> rooms) throws IOException {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         final ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(out, rooms);
@@ -115,26 +123,13 @@ public class Message<T> {
         return new String(data);
     }
 
+    public boolean isSuccessed() {
+        return isSuccessed;
+    }
 
+    public void setSuccessed(boolean successed) {
+        isSuccessed = successed;
+    }
 
 }
-class RoomList{
-    private String roomId;
-    private String count;
-    RoomList(){
-    }
-    RoomList(String roomId, String count) {
-        this.roomId = roomId;
-        this.count = count;
-    }
 
-    public String getRoomId(){
-        return roomId;
-    }
-    public String getCount(){
-        return count;
-    }
-    public String toString(){
-        return "roomId: "+roomId+", count: "+count;
-    }
-}
