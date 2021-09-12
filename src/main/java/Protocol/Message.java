@@ -20,12 +20,11 @@ public class Message<T> {
     private String former;
     private String owner;
     private String roomId;
-    private Map<String,String> rooms;
+    private List<Room> rooms;
     private List<String> identities;
     @JsonIgnore
     private boolean isSuccessed;
-//    @JsonIgnore
-//    private List<Room> roomInfo; // actual Room object is not passed.
+
     // message head constant
     public static final String MESSAGE_HEAD = "content";
     public static final String TYPE_HEAD = "type";
@@ -33,7 +32,7 @@ public class Message<T> {
     public static final String ROOM_HEAD ="room";
     public static final String ROOM_DESTINATION_HEAD ="roomId";
     public static final String COUNT_HEAD = "count";
-    public static final String ROOM_LIST_HEAD ="roomInfo";
+    public static final String ROOM_LIST_HEAD ="rooms";
     public static final String FORMER_HEAD ="former";
     public static final String IDENTITY_HEAD ="identity";
     public static final String OWNER_HEAD = "owner";
@@ -67,8 +66,7 @@ public class Message<T> {
     public String getOwner(){return this.owner;}
     public String getFormer(){return this.former;}
     public String getRoomId(){return this.roomId;}
-    public Map<String,String> getRooms(){return this.rooms;}
-//    public List<Room> getRoomInfo(){return this.roomInfo;}
+    public List<Room> getRooms(){return this.rooms;}
     public List<String> getParticipants(){return this.identities;}
 
     public void setType(String type) {this.type = type;}
@@ -78,8 +76,7 @@ public class Message<T> {
     public void setFormer(String former) {this.former = former;}
     public void setOwner(String owner) {this.owner = owner;}
     public void setRoomId(String roomId) {this.roomId = roomId;}
-    public void setRooms(Map<String,String> rooms){this.rooms=rooms;}
-//    public void setRoomInfo(List<Room> roomInfo) {this.roomInfo = roomInfo;}
+    public void setRooms(List<Room> rooms){this.rooms=rooms;}
     public void setParticipants(List<String> participants) {this.identities = participants;}
 
 

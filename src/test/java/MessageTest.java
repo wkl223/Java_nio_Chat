@@ -7,7 +7,9 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 class MessageTest {
     static ObjectMapper mapper=new ObjectMapper();
@@ -19,7 +21,7 @@ class MessageTest {
     String jsonMessageWithRoom="{\"content\":\""+testMessage+"\",\"type\":\""+type+"\",\"identity\":\""+ identity +"\",\"room\":\""+room+"\"}";
     static void generateRooms(List<Room> rooms){
         for(int i =0; i < 10; i++){
-            rooms.add(new Room("TEST_ROOM"+i,String.valueOf(i)));
+            rooms.add(new Room("TEST_ROOM"+i,String.valueOf(i),"admin"));
         }
     }
     static int findAndRemoveRoom(List<Room> rooms, String target){

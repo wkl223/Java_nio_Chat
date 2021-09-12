@@ -95,11 +95,7 @@ public class ServerResponds {
     public static Protocol roomList(List<Room> chatRoom){
         Message m = new Message();
         m.setType(Message.TYPE_ROOM_LIST);
-        Map<String,String> tempRoomsInfo = new HashMap<>();
-        for(Room r: chatRoom){
-            tempRoomsInfo.put(r.getRoomId(),r.getCount());
-        }
-        m.setRooms(tempRoomsInfo);
+        m.setRooms(chatRoom);
         m.setSuccessed(true);
         return new Protocol(m);
     }

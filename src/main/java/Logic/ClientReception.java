@@ -1,6 +1,7 @@
 package Logic;
 
 import Protocol.*;
+import Protocol.Entity.Room;
 
 import java.io.IOException;
 import java.util.List;
@@ -35,11 +36,11 @@ public class ClientReception {
         return "Room: "+roomId+", who is in this room: "+identities.toString()+", Owner: "+owner;
     }
     public static String roomList(Protocol p) throws IOException{
-        // partial message, not necessary pass Room object
-        Map<String,String> rooms =p.getMessage().getRooms();
+        // partial message
+        List<Room> rooms =p.getMessage().getRooms();
         String response="";
-        for(Map.Entry<String,String> entry: rooms.entrySet()){
-            response= Message.addHeadAndTail(entry.getKey()+", "+entry.getValue(),"[","]\r\n");
+        for(Room r: rooms){
+            response= Message.addHeadAndTail(r.getRoomId()+", "+r.getCount(),"[","]\r\n");
         }
         return response;
     }

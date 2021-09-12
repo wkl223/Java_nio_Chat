@@ -1,13 +1,20 @@
 package Protocol.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class Room{
     private String roomId;
     private String count;
+    @JsonIgnore
     public String owner;
+    @JsonIgnore
     public List<String> users;
+    @JsonIgnore
     public static final int SUCCESS =1;
+    @JsonIgnore
     public static final int FAILURE =-1;
 
     public Room(){
@@ -16,11 +23,13 @@ public class Room{
         this.roomId = roomId;
         this.count = count;
         this.owner=owner;
+        users = new ArrayList<String>();
     }
     public Room(String roomId, String count) {
         this.roomId = roomId;
         this.count = count;
         this.owner="";
+        users = new ArrayList<String>();
     }
     public synchronized int removeUser(String username){
         if(users.contains(username)){
