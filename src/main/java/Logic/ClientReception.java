@@ -47,7 +47,7 @@ public class ClientReception {
             return "The room was not found or successfully deleted";
         }
         for(Room r: rooms){
-            response += Message.addHeadAndTail(r.getRoomId()+", "+r.getCount(),"[","]\r\n");
+            response += Message.addHeadAndTail(r.getRoomId()+", Number of people in the room:"+r.getCount(),"[","]");
         }
         return response;
     }

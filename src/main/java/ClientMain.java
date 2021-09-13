@@ -134,7 +134,7 @@ public class ClientMain {
                     if(former.equals("")) {
                         this.currentRoom = DEFAULT_ROOM;
                     }
-                    this.prefix =String.format("[%s]: %s", this.currentRoom, this.userName);
+                    this.prefix =String.format("[%s]: %s> ", this.currentRoom, this.userName);
                 }
                 return ClientReception.newIdentity(p, client);
             }
