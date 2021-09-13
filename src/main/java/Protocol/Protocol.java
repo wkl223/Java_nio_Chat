@@ -50,6 +50,8 @@ public class Protocol {
     public static boolean isValidCommandType(String input){
         switch (input){
             case Message.TYPE_WHO:
+            case Message.TYPE_IDENTITY_CHANGE:
+            case Message.TYPE_JOIN:
             case Message.TYPE_ROOM_CREATION:
             case Message.TYPE_LIST:
             case Message.TYPE_DELETE:

@@ -58,7 +58,7 @@ public class ServerResponds {
         String roomId = requestedRoomId;
         m.setType(Message.TYPE_ROOM_CHANGE);
         // 1. room not found
-        if(findRoom(chatRoom,requestedRoomId) == null){
+        if(findRoom(chatRoom,requestedRoomId) == null ||former.equals(roomId)){
             m.setFormer(former);
             m.setRoomId(former);
             m.setIdentity(identity);

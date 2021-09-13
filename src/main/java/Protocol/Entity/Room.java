@@ -50,7 +50,9 @@ public class Room{
         return roomId;
     }
     public String getCount(){
-        count = String.valueOf(users.size());
+        // if there is users in the object, then it means it is the server-side object.
+        if(users != null)
+            count = String.valueOf(users.size());
         return count;
     }
     public List<String> getUsers(){

@@ -3,6 +3,8 @@ package Logic;
 import Protocol.*;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 /*
@@ -15,18 +17,24 @@ public class ClientResponds {
     //since it is human typing command, so extra command checking function is required.
     public static String getCommand(String message){
         StringTokenizer tokenizer = new StringTokenizer(message," ");
-        if(!(tokenizer.countTokens()<=2)){
+        if((tokenizer.countTokens()<=2)&&tokenizer.countTokens()>0){
             String firstArg =tokenizer.nextToken().substring(1);
             if(Protocol.isValidCommandType(firstArg))
                 return firstArg;
         }
         return null;
     }
-    public static String processMessage(String message) throws IOException {
-        if(getCommand(message)!=null){
+    public static String processMessage(String message, Map<String,String> requests) throws IOException {
+        String command =getCommand(message);
+        if(command!=null){
             StringTokenizer tokenizer = new StringTokenizer(message," ");
-            String command = tokenizer.nextToken();
-            String request = tokenizer.nextToken();
+            tokenizer.nextToken();
+            String request = null;
+            try {
+                 request = tokenizer.nextToken();
+            }catch(Exception e){
+                //don't do anything
+                }
             switch(command){
                 case Message.TYPE_IDENTITY_CHANGE:
                     Protocol answer =identityChange(request);
@@ -38,14 +46,21 @@ public class ClientResponds {
                     return who(request).encodeJson();
                 case Message.TYPE_LIST:
                     return list().encodeJson();
-                case Message.TYPE_ROOM_CREATION:
+                case Message.TYPE_ROOM_CREATION: {
+                    if (createRoom(request) == null) return "Invalid room name";
                     return createRoom(request).encodeJson();
-                case Message.TYPE_DELETE:
+                }
+                case Message.TYPE_DELETE: {
+                    if(request!=null)
+                        requests.put(Message.TYPE_DELETE,request);
                     return deleteRoom(request).encodeJson();
+                }
                 case Message.TYPE_QUIT:
                     return quit().encodeJson();
-                default:
-                    return "DEBUG - SOMETHING WRONG WITH THE PROCESS MESSAGE FUNCTION?";
+                default: {
+                    System.out.println("DEBUG - SOMETHING WRONG WITH THE PROCESS MESSAGE FUNCTION?");
+                    return null;
+                }
             }
         }
         return message(message).encodeJson();
@@ -78,7 +93,10 @@ public class ClientResponds {
         m.setType(Message.TYPE_LIST);
         return new Protocol(m);
     }
-    public static Protocol createRoom(String request){
+    public static Protocol createRoom(Object re){
+        String request = null;
+        if(re instanceof String) request = (String) re;
+        else return null;
         if (request.length()<3 || request.length()>32) return null;
         if (!request.matches(ALPHABETIC_PATTERN)) return null;
         Message m = new Message();

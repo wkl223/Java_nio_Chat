@@ -2,6 +2,7 @@ package Protocol;
 
 import Protocol.Entity.Room;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@JsonIgnoreProperties(value = { "isSuccessed","successed" })
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Message<T> {
     private String type;
@@ -72,7 +74,6 @@ public class Message<T> {
     public void setType(String type) {this.type = type;}
     public void setContent(String content) {this.content = content;}
     public void setIdentity(String identity) {this.identity = identity;}
-    public void setRoom(String room) {this.room = room;}
     public void setFormer(String former) {this.former = former;}
     public void setOwner(String owner) {this.owner = owner;}
     public void setRoomId(String roomId) {this.roomId = roomId;}

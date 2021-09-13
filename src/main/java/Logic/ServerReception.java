@@ -13,6 +13,7 @@ import java.util.Map;
  *  Construct Json message (Protocol) from Message object
  * */
 public class ServerReception {
+    public static final String DEFAULT_ROOM = "MainHall";
 
     public static Protocol quit(Protocol p, String client, List<Room> chatRoom, Map<String,String> clients) throws IOException {
         Protocol respond = ServerResponds.roomChange(chatRoom,client, (String) clients.get(client), Message.EMPTY);
@@ -23,25 +24,32 @@ public class ServerReception {
         Protocol respond = ServerResponds.message(content,client);
         return respond;
     }
-    public static Protocol deleteRoom(Protocol p,  String client, List<Room> chatRoom) throws IOException{
+    public static Protocol deleteRoom(Protocol p,  String client,Map<String,String> clients, List<Room> chatRoom) throws IOException{
         String requestedRoomId = p.getMessage().getRoomId();
-        Protocol respond;
+        Protocol respond = null;
         Room targetRoom =ServerResponds.findRoom(chatRoom,requestedRoomId);
-        if(targetRoom.getOwner().equals(client)) {
-            chatRoom.remove(targetRoom);
-            respond = ServerResponds.roomList(chatRoom);
-            respond.getMessage().setSuccessed(true);
+        if(targetRoom!= null && !targetRoom.getRoomId().equals(DEFAULT_ROOM)) {
+            if(targetRoom.getOwner().equals(client)) {
+                // 1. put everyone into main hall.
+                for (String user : targetRoom.users) {
+                    clients.remove(user);
+                    clients.put(user, DEFAULT_ROOM);
+                }
+                // 2. remove room object.
+                chatRoom.remove(targetRoom);
+                respond = ServerResponds.roomList(chatRoom);
+                respond.getMessage().setSuccessed(true);
+                return respond;
+            }
         }
-        else{
-            respond = ServerResponds.roomList(chatRoom);
-            respond.getMessage().setSuccessed(false);
-        }
+        respond = ServerResponds.roomList(chatRoom);
+        respond.getMessage().setSuccessed(false);
         return respond;
     }
-    public static Protocol createRoom(Protocol p, String client,List<Room>chatRoom) throws IOException{
+    public static Protocol createRoom(Protocol p, String client,List<Room> chatRoom) throws IOException{
         String requestedRoomId = p.getMessage().getRoomId();
         Protocol respond;
-        if(ServerResponds.findRoom(chatRoom,requestedRoomId)!= null)
+        if(ServerResponds.findRoom(chatRoom,requestedRoomId)== null)
         {
             chatRoom.add(new Room(requestedRoomId, "0", client));
             respond = ServerResponds.roomList(chatRoom);
@@ -63,12 +71,11 @@ public class ServerReception {
         Protocol respond = ServerResponds.roomContents(requestRoomid,chatRoom);
         if(respond.getMessage().isSuccessed())
             return respond;
-        else
-            System.out.println("DEBUG - client: "+client+" sent invalid room id for WHO command: "+requestRoomid);
-        return null;
+        else System.out.println("DEBUG - client: " + client + " sent invalid room id for WHO command: " + requestRoomid);
+        return respond;
     }
     public static Protocol joinRoom(Protocol p, String client, Map<String,String>clients, List<Room>chatRoom) throws IOException{
-        String identity = p.getMessage().getIdentity();
+        String identity = client;
         String formerRoomId = clients.get(client);
         String requestRoomid = p.getMessage().getRoomId();
         Protocol respond = ServerResponds.roomChange(chatRoom,identity,formerRoomId,requestRoomid);
@@ -77,6 +84,8 @@ public class ServerReception {
                 if (r.getRoomId().equals(requestRoomid)) r.addUser(client); //add to new list
                 if (r.getRoomId().equals(formerRoomId)) r.removeUser(client); // remove from the former room list.
             }
+            clients.remove(identity);
+            clients.put(identity,requestRoomid);
         }
         return respond;
     }

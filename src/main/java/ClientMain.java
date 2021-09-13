@@ -1,3 +1,5 @@
+import Logic.ClientReception;
+import Logic.ClientResponds;
 import Protocol.Message;
 import Protocol.Protocol;
 
@@ -9,20 +11,21 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+
 public class ClientMain {
     private static final ExecutorService USER_INPUT_HANDLER = Executors.newSingleThreadExecutor();
+    public static final String DEFAULT_ROOM = "MainHall";
     public static final int port = 4456;
     public static final String host = "127.0.0.1";
-    public static final int VALID_MESSAGE =1;
-    public static final int INVALID_MESSAGE =-1;
 
     private String userName;
     private String currentRoom;
+    private String prefix;
+    private Map<String,String> request = new HashMap<>();
 
     public void handle() {
         try {
@@ -53,7 +56,6 @@ public class ClientMain {
         if (selectionKey.isConnectable()) {
             SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
             try {
-
                 if (socketChannel.isConnectionPending()) {
                     socketChannel.finishConnect();
                     System.out.println("Connection successd");
@@ -64,25 +66,23 @@ public class ClientMain {
                         while (!Thread.currentThread().isInterrupted()) {
                             byteBuffer.clear();
                             String message = new Scanner(System.in).nextLine();
-                            Message m = new Message();
-                            if (isCommand(message)){
-                                // for command
-                            }
-                            else{
-                                m.setType(Message.TYPE_MESSAGE);
-                                m.setContent(message);
-                            }
                             try {
-                                byteBuffer.put(new Protocol(m).encodeJson().getBytes(StandardCharsets.UTF_8));
-                                byteBuffer.flip();
-                                System.out.println("DEBUG: "+String.format("[%s]: %s", userName, message));
-                                while (byteBuffer.hasRemaining()) {
-                                    socketChannel.write(byteBuffer);
+                                String m =ClientResponds.processMessage(message,request);
+                                System.out.println("DEBUG - client side: "+m);
+                                if(m!=null) {
+                                    byteBuffer.put(new Protocol(m).encodeJson().getBytes(StandardCharsets.UTF_8));
+                                    byteBuffer.flip();
+                                    while (byteBuffer.hasRemaining()) {
+                                        socketChannel.write(byteBuffer);
+                                    }
                                 }
                             } catch (IOException e) {
-                                e.printStackTrace();
+                               //System.out.println("Invalid input");
+                            } catch(NullPointerException e){
+                                //System.out.println("Invalid input");
                             }
-                            //TODO: quit
+                            catch(Exception e){ System.out.println("Strange error?");
+                            }
                         }
                         try {
                             selector.close();
@@ -107,21 +107,12 @@ public class ClientMain {
                 String message = String.valueOf(StandardCharsets.UTF_8.decode(b));
                 b.clear();
                 System.out.println("DEBUG server msg: "+message);
-                if(isCommand(message)){
-                    //TODO: command logic
-                    String[] res = message.split(":");
-                    System.out.println("DEBUG: in system username: "+res);
-                    setUserName(res[1]);
-                }
+                String serverRespond = processMessageAndRepresent(message,userName);
+                System.out.println(prefix+serverRespond);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-    }
-    private boolean isCommand(String message){
-        if (message.charAt(0)=='#')
-            return true;
-        else return false;
     }
 
 
@@ -129,9 +120,41 @@ public class ClientMain {
         ClientMain client = new ClientMain();
         client.handle();
     }
-
-    private void setUserName(String name) {
-        this.userName=name;
+    public String processMessageAndRepresent(String message, String name) throws IOException {
+        Protocol p = new Protocol(message);
+        String client = name;
+        switch (p.decodeJson().getType()){
+            case Message.TYPE_NEW_IDENTITY: {
+                String former = p.getMessage().getFormer();
+                String identity =p.getMessage().getIdentity();
+                if((!former.equals(identity)) && (former.equals(client)||former.equals(""))){
+                    System.out.println("DEBUG - NEW IDENTITY successed:"+identity);
+                    this.userName=identity;
+                    client = this.userName;
+                    if(former.equals("")) {
+                        this.currentRoom = DEFAULT_ROOM;
+                    }
+                    this.prefix =String.format("[%s]: %s", this.currentRoom, this.userName);
+                }
+                return ClientReception.newIdentity(p, client);
+            }
+            case Message.TYPE_ROOM_CHANGE: {
+                String formerRoom = p.getMessage().getFormer();
+                String roomId = p.getMessage().getRoomId();
+                String identity = p.getMessage().getIdentity();
+                if (!formerRoom.equals(roomId) && identity.equals(userName)) this.currentRoom = roomId;
+                return ClientReception.roomChange(p, client);
+            }
+            case Message.TYPE_ROOM_CONTENTS:
+                return ClientReception.roomContents(p);
+            case Message.TYPE_ROOM_LIST: {
+                return ClientReception.roomList(p,request);
+            }
+            case Message.TYPE_MESSAGE:
+                return ClientReception.message(p);
+            default:
+                System.out.println("DEBUG: Server sends a message with incorrect type!");
+                return null;
+        }
     }
-    private void setCurrentRoom(String room){currentRoom=room;}
 }
