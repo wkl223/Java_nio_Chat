@@ -51,6 +51,8 @@ public class ClientMain {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        }finally {
+            quit();
         }
     }
 

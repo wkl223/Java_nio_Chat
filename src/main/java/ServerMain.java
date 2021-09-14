@@ -62,7 +62,7 @@ public class ServerMain {
       try {
             socketChannel.write(byteBuffer);
       } catch (IOException e) {
-        e.printStackTrace();
+        break;
       }
     }
     byteBuffer.clear();
@@ -85,7 +85,7 @@ public class ServerMain {
           try {
             socketChannel.write(byteBuffer);
           } catch (IOException e) {
-            e.printStackTrace();
+            break;
           }
         }
         byteBuffer.reset();
@@ -129,7 +129,7 @@ public class ServerMain {
       System.out.println("connection reset by peer");
     }
   }
-  private void selectionKeyHandler(SelectionKey selectionKey, Selector selector){
+  private void selectionKeyHandler(SelectionKey selectionKey, Selector selector) throws IOException {
     // if a connection event
     if (selectionKey.isAcceptable()){
       try{
@@ -168,7 +168,12 @@ public class ServerMain {
           processMessageAndRespond(message,client,selector,selectionKey);
           b.clear();
         } catch (IOException e) {
-          e.printStackTrace();
+          //something wrong with the client. treat it as quit
+          Message m = new Message();
+          m.setType(Message.TYPE_QUIT);
+          m.setSuccessed(true);
+          Protocol p = new Protocol(m);
+          processMessageAndRespond(p.encodeJson(), (String) selectionKey.attachment(),selector,selectionKey);
         }catch(Exception e){};//just in case
       }
     }
@@ -220,6 +225,8 @@ public class ServerMain {
                 affectedUser = (targetRoom.users == null)||(targetRoom.users.size()==0)? formerRoom.users:targetRoom.users;
               }
               broadCast(answer, (ArrayList<String>) affectedUser,selector,selectionKey);
+              //finally, delete room if the room has no owner and no users.
+              if(formerRoom.users.size()==0 && formerRoom.owner.equals(Message.EMPTY)) chatRoom.remove(formerRoom);
             }
           singleResponse(answer,client,selector);
           break;
@@ -249,14 +256,7 @@ public class ServerMain {
         //2. remove all occupied rooms
         for(Room r: chatRoom){
           if(r.owner.equals(client)){
-            for(String c: r.users){
-              Protocol temp = ServerResponds.roomChange(chatRoom,c,r.getRoomId(),DEFAULT_ROOM);
-              singleResponse(temp,c,selector);
-              broadCast(temp, (ArrayList<String>) defaultRoom.users,selector,selectionKey);
-              defaultRoom.users.add(c);
-              clients.remove(c);
-              clients.put(c,DEFAULT_ROOM);
-            }
+            r.owner="";
           }
         }
         clients.remove(client);

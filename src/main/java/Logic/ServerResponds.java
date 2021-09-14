@@ -46,7 +46,9 @@ public class ServerResponds {
     private static synchronized String getAvailableClientName(List<String> freeName){
         if(freeName.size()!=0) {
             System.out.println("DEBUG - current available free name:" + freeName.size());
-            return freeName.get(0);
+            String name =freeName.get(0);
+            freeName.remove(0);
+            return name;
         }
         String name = "Guest"+ ClientCount;
         ClientCount+=1;
