@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module relativePaths="true" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output/>
+    <orderEntry type="inheritedJdk"/>
+    <content url="file://$MODULE_DIR$/">
+      <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false"/>
+      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true"/>
+      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource"/>
+      <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource"/>
+      <excludeFolder url="file://$MODULE_DIR$/.gradle"/>
+      <excludeFolder url="file://$MODULE_DIR$/build"/>
+    </content>
+    <orderEntry type="sourceFolder" forTests="false"/>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/28.0-jre/54fed371b4b8a8cce1e94a9abd9620982d3aa54b/guava-28.0-jre.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/28.0-jre/2d1dca555245ef4bacb35f25299f323d8dd10b27/guava-28.0-jre-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/io.vertx/vertx-core/3.5.3/9c91be8c8a80e97d1059c98c506ebbafc9e9c174/vertx-core-3.5.3.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/io.vertx/vertx-core/3.5.3/3fb6998111f65daca83ba640e646cc666deb7150/vertx-core-3.5.3-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-annotations/2.12.5/52d929d5bb21d0186fe24c09624cc3ee4bafc3b3/jackson-annotations-2.12.5.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-annotations/2.12.5/594b99ba0f5e72701599103f446d4a47cd7675b1/jackson-annotations-2.12.5-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.12.5/725e364cc71b80e60fa450bd06d75cdea7fb2d59/jackson-core-2.12.5.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.12.5/c85582cc77d4383286bad26c10ef4ed87d13e46a/jackson-core-2.12.5-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-databind/2.12.5/b064cf057f23d3d35390328c5030847efeffedde/jackson-databind-2.12.5.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-databind/2.12.5/485c92bdef6ee7b1b2090c045dea943a9c7b8f8c/jackson-databind-2.12.5-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/com.google.guava/failureaccess/1.0.1/1dcf1de382a0bf95a3d8b0849546c88bac1292c9/failureaccess-1.0.1.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/com.google.guava/failureaccess/1.0.1/1d064e61aad6c51cc77f9b59dc2cccc78e792f5a/failureaccess-1.0.1-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/com.google.guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/b421526c5f297295adef1c886e5246c39d4ac629/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES/>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/com.google.code.findbugs/jsr305/3.0.2/25ea2e8b0c338a877313bd4672d3fe056ea78f0d/jsr305-3.0.2.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/com.google.code.findbugs/jsr305/3.0.2/b19b5927c2c25b6c70f093767041e641ae0b1b35/jsr305-3.0.2-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/org.checkerframework/checker-qual/2.8.1/eb2e8ab75598548cc8acf9a1ca227e480e01881e/checker-qual-2.8.1.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/org.checkerframework/checker-qual/2.8.1/4b07e85f804e861360ee09ddd4550bc6b3fcfcad/checker-qual-2.8.1-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.3.2/d1a0c5032570e0f64be6b4d9c90cdeb103129029/error_prone_annotations-2.3.2.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.3.2/6e986bccd3d116d8bc1aaac8534d068ea8edd2ae/error_prone_annotations-2.3.2-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/com.google.j2objc/j2objc-annotations/1.3/ba035118bc8bac37d7eff77700720999acd9986d/j2objc-annotations-1.3.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/com.google.j2objc/j2objc-annotations/1.3/d26c56180205cbb50447c3eca98ecb617cf9f58b/j2objc-annotations-1.3-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/org.codehaus.mojo/animal-sniffer-annotations/1.17/f97ce6decaea32b36101e37979f8b647f00681fb/animal-sniffer-annotations-1.17.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/org.codehaus.mojo/animal-sniffer-annotations/1.17/8fb5b5ad9c9723951b9fccaba5bb657fa6064868/animal-sniffer-annotations-1.17-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/io.netty/netty-codec-http2/4.1.19.Final/665bd06aed74b3f5592465dda2e00e3d03f41048/netty-codec-http2-4.1.19.Final.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/io.netty/netty-codec-http2/4.1.19.Final/dcde10cc120d93d35c6e87b427804b6addf6d2b2/netty-codec-http2-4.1.19.Final-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/io.netty/netty-handler/4.1.19.Final/9c784510bc6f81177c4f2c2956144438863cdac4/netty-handler-4.1.19.Final.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/io.netty/netty-handler/4.1.19.Final/b8379c22d9ca2ffbbec2edf70ade7aa317a4e11a/netty-handler-4.1.19.Final-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/io.netty/netty-handler-proxy/4.1.19.Final/47c7f7977cea190351962bee726f663eb6488a22/netty-handler-proxy-4.1.19.Final.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/io.netty/netty-handler-proxy/4.1.19.Final/15a0d1102f3cd98e2e06b9c2c86a258d3c821c4f/netty-handler-proxy-4.1.19.Final-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/io.netty/netty-resolver-dns/4.1.19.Final/67a1e265bcbc49160417c81fdf2fdc50ea423727/netty-resolver-dns-4.1.19.Final.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/io.netty/netty-resolver-dns/4.1.19.Final/eeaf899f43616e6b24828b9f2c73c0f14de88e00/netty-resolver-dns-4.1.19.Final-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/io.netty/netty-codec-http/4.1.19.Final/f7edff289d10cc03cdb97ad99e2722f9d61ffdc3/netty-codec-http-4.1.19.Final.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/io.netty/netty-codec-http/4.1.19.Final/8fcd1eb540c79da339fbc7894c6d8a113adb4561/netty-codec-http-4.1.19.Final-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/io.netty/netty-codec-socks/4.1.19.Final/c84f0540fceccae979d7aeb17b1fa0057c038df9/netty-codec-socks-4.1.19.Final.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/io.netty/netty-codec-socks/4.1.19.Final/7a9ac9e8768ea3eb5062231809787abba3d4686d/netty-codec-socks-4.1.19.Final-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/io.netty/netty-codec-dns/4.1.19.Final/8b0a7fd3c67e8bd5e3d347f9bb200ae0aaa5c1b7/netty-codec-dns-4.1.19.Final.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/io.netty/netty-codec-dns/4.1.19.Final/ec2233bf6873b60db53d4b269d50f24ccfc64735/netty-codec-dns-4.1.19.Final-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/io.netty/netty-codec/4.1.19.Final/ad4d4309c5b011036ca4df6aca190983d75c6b19/netty-codec-4.1.19.Final.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/io.netty/netty-codec/4.1.19.Final/49b122ccbb33de7afcc30b0be1e442ba524666cc/netty-codec-4.1.19.Final-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport/4.1.19.Final/4f26f51b86dc1ab19621eb2ac39f1a63682f17f2/netty-transport-4.1.19.Final.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport/4.1.19.Final/6bd08157b7d9fae4b3842f268be32488313c65f0/netty-transport-4.1.19.Final-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/io.netty/netty-buffer/4.1.19.Final/65abf40a28ce4f52dd763d0b4f740066a87b5c9e/netty-buffer-4.1.19.Final.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/io.netty/netty-buffer/4.1.19.Final/ce86e272ebcfb58848b82e40566315c736d0982a/netty-buffer-4.1.19.Final-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/io.netty/netty-resolver/4.1.19.Final/7d97be8b3fb195f9d94d9a4afcadef25e08bde2/netty-resolver-4.1.19.Final.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/io.netty/netty-resolver/4.1.19.Final/3a771de882966365d16acad1a0c45beeb9bc11a1/netty-resolver-4.1.19.Final-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/io.netty/netty-common/4.1.19.Final/b281916c11d3eeec5e839677ec4f2eb9d7586928/netty-common-4.1.19.Final.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/io.netty/netty-common/4.1.19.Final/b42475b64795434a713f8bac8389c13049f0f072/netty-common-4.1.19.Final-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" scope="TEST">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/org.junit.platform/junit-platform-commons/1.7.0/84e309fbf21d857aac079a3c1fffd84284e1114d/junit-platform-commons-1.7.0.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/org.junit.platform/junit-platform-commons/1.7.0/a382c78ca35b240e3b88b4d68ef6884a365631f0/junit-platform-commons-1.7.0-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" scope="TEST">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/org.junit.jupiter/junit-jupiter-api/5.7.0/b25f3815c4c1860a73041e733a14a0379d00c4d5/junit-jupiter-api-5.7.0.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/org.junit.jupiter/junit-jupiter-api/5.7.0/388560dc9aa3c479df4e3effce036646c8b89719/junit-jupiter-api-5.7.0-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" scope="TEST">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/org.apiguardian/apiguardian-api/1.1.0/fc9dff4bb36d627bdc553de77e1f17efd790876c/apiguardian-api-1.1.0.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/org.apiguardian/apiguardian-api/1.1.0/f3c15fe970af864390c8d0634c9f16aca1b064a8/apiguardian-api-1.1.0-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" scope="TEST">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/org.opentest4j/opentest4j/1.2.0/28c11eb91f9b6d8e200631d46e20a7f407f2a046/opentest4j-1.2.0.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/org.opentest4j/opentest4j/1.2.0/41d55b3c2254de9837b4ec8923cbd371b8a7eab5/opentest4j-1.2.0-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" scope="TEST">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/org.junit.platform/junit-platform-engine/1.7.0/eadb73c5074a4ac71061defd00fc176152a4d12c/junit-platform-engine-1.7.0.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/org.junit.platform/junit-platform-engine/1.7.0/987bee3f7c9ae0c219bae82e3cfe073708cbadad/junit-platform-engine-1.7.0-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" scope="TEST">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/org.junit.jupiter/junit-jupiter-engine/5.7.0/d9044d6b45e2232ddd53fa56c15333e43d1749fd/junit-jupiter-engine-5.7.0.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar://C:/Users/kai/.gradle/caches/modules-2/files-2.1/org.junit.jupiter/junit-jupiter-engine/5.7.0/9c4b766f5e598d39ea76858dcc5a6e3d8fa5ca7f/junit-jupiter-engine-5.7.0-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+  </component>
+  <component name="ModuleRootManager"/>
+</module>

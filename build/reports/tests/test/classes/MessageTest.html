@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - Class MessageTest</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>Class MessageTest</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/default-package.html">default-package</a> &gt; MessageTest</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">14</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">0.104s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div id="tabs">
+<ul class="tabLinks">
+<li>
+<a href="#tab0">Tests</a>
+</li>
+<li>
+<a href="#tab1">Standard output</a>
+</li>
+</ul>
+<div id="tab0" class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Method name</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">Client quits</td>
+<td class="success">clientQuit()</td>
+<td class="success">0s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">Client request for delete room</td>
+<td class="success">clientRequestDelete()</td>
+<td class="success">0.003s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">Client request for room creation</td>
+<td class="success">clientRequestRoomCreation()</td>
+<td class="success">0.001s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">Client request for room list</td>
+<td class="success">clientRequestRoomList()</td>
+<td class="success">0.014s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">Client request for roommates info</td>
+<td class="success">clientRequestRoomMates()</td>
+<td class="success">0.001s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">Client send identity change message</td>
+<td class="success">clientSendsIdentityChange()</td>
+<td class="success">0.001s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">Client send join room message</td>
+<td class="success">clientSendsJoinRoom()</td>
+<td class="success">0.067s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">Client sends message</td>
+<td class="success">clientSendsMessage()</td>
+<td class="success">0.014s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">Simple get message</td>
+<td class="success">getMessage()</td>
+<td class="success">0s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">Simple get room</td>
+<td class="success">getRoom()</td>
+<td class="success">0.001s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">Simple get sender</td>
+<td class="success">getSender()</td>
+<td class="success">0s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">Simple get type</td>
+<td class="success">getType()</td>
+<td class="success">0.001s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">Server respond NewIdentity message</td>
+<td class="success">serverRespondsIdentityChange()</td>
+<td class="success">0s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">Write and read</td>
+<td class="success">transformJsonTest()</td>
+<td class="success">0.001s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div id="tab1" class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>CLIENT: Join room message:{&quot;type&quot;:&quot;join&quot;,&quot;roomId&quot;:&quot;HelloooooRoom&quot;}
+SERVER: Join room respond:{&quot;type&quot;:&quot;roomchange&quot;,&quot;identity&quot;:&quot;Guest111&quot;,&quot;former&quot;:&quot;MainHall&quot;,&quot;roomId&quot;:&quot;HelloooooRoom&quot;}
+SERVER: CURRENT ROOM LIST:[roomId: TEST_ROOM0, count: 0, roomId: TEST_ROOM1, count: 1, roomId: TEST_ROOM2, count: 2, roomId: TEST_ROOM3, count: 3, roomId: TEST_ROOM4, count: 4, roomId: TEST_ROOM5, count: 5, roomId: TEST_ROOM6, count: 6, roomId: TEST_ROOM7, count: 7, roomId: TEST_ROOM8, count: 8, roomId: TEST_ROOM9, count: 9]
+CLIENT: List room message:{&quot;type&quot;:&quot;list&quot;}
+SERVER: Join room respond:{&quot;type&quot;:&quot;roomlist&quot;,&quot;rooms&quot;:[{&quot;roomId&quot;:&quot;TEST_ROOM0&quot;,&quot;count&quot;:&quot;0&quot;},{&quot;roomId&quot;:&quot;TEST_ROOM1&quot;,&quot;count&quot;:&quot;0&quot;},{&quot;roomId&quot;:&quot;TEST_ROOM2&quot;,&quot;count&quot;:&quot;0&quot;},{&quot;roomId&quot;:&quot;TEST_ROOM3&quot;,&quot;count&quot;:&quot;0&quot;},{&quot;roomId&quot;:&quot;TEST_ROOM4&quot;,&quot;count&quot;:&quot;0&quot;},{&quot;roomId&quot;:&quot;TEST_ROOM5&quot;,&quot;count&quot;:&quot;0&quot;},{&quot;roomId&quot;:&quot;TEST_ROOM6&quot;,&quot;count&quot;:&quot;0&quot;},{&quot;roomId&quot;:&quot;TEST_ROOM7&quot;,&quot;count&quot;:&quot;0&quot;},{&quot;roomId&quot;:&quot;TEST_ROOM8&quot;,&quot;count&quot;:&quot;0&quot;},{&quot;roomId&quot;:&quot;TEST_ROOM9&quot;,&quot;count&quot;:&quot;0&quot;}]}
+[roomId: TEST_ROOM0, count: 0, roomId: TEST_ROOM1, count: 0, roomId: TEST_ROOM2, count: 0, roomId: TEST_ROOM3, count: 0, roomId: TEST_ROOM4, count: 0, roomId: TEST_ROOM5, count: 0, roomId: TEST_ROOM6, count: 0, roomId: TEST_ROOM7, count: 0, roomId: TEST_ROOM8, count: 0, roomId: TEST_ROOM9, count: 0]
+CLIENT: Delete room message:{&quot;type&quot;:&quot;delete&quot;,&quot;roomId&quot;:&quot;TEST_ROOM1&quot;}
+SERVER: CURRENT ROOM LIST:[roomId: TEST_ROOM0, count: 0, roomId: TEST_ROOM1, count: 1, roomId: TEST_ROOM2, count: 2, roomId: TEST_ROOM3, count: 3, roomId: TEST_ROOM4, count: 4, roomId: TEST_ROOM5, count: 5, roomId: TEST_ROOM6, count: 6, roomId: TEST_ROOM7, count: 7, roomId: TEST_ROOM8, count: 8, roomId: TEST_ROOM9, count: 9]
+SERVER: Join room respond:{&quot;type&quot;:&quot;roomlist&quot;,&quot;rooms&quot;:[{&quot;roomId&quot;:&quot;TEST_ROOM0&quot;,&quot;count&quot;:&quot;0&quot;},{&quot;roomId&quot;:&quot;TEST_ROOM2&quot;,&quot;count&quot;:&quot;0&quot;},{&quot;roomId&quot;:&quot;TEST_ROOM3&quot;,&quot;count&quot;:&quot;0&quot;},{&quot;roomId&quot;:&quot;TEST_ROOM4&quot;,&quot;count&quot;:&quot;0&quot;},{&quot;roomId&quot;:&quot;TEST_ROOM5&quot;,&quot;count&quot;:&quot;0&quot;},{&quot;roomId&quot;:&quot;TEST_ROOM6&quot;,&quot;count&quot;:&quot;0&quot;},{&quot;roomId&quot;:&quot;TEST_ROOM7&quot;,&quot;count&quot;:&quot;0&quot;},{&quot;roomId&quot;:&quot;TEST_ROOM8&quot;,&quot;count&quot;:&quot;0&quot;},{&quot;roomId&quot;:&quot;TEST_ROOM9&quot;,&quot;count&quot;:&quot;0&quot;}]}
+[roomId: TEST_ROOM0, count: 0, roomId: TEST_ROOM2, count: 0, roomId: TEST_ROOM3, count: 0, roomId: TEST_ROOM4, count: 0, roomId: TEST_ROOM5, count: 0, roomId: TEST_ROOM6, count: 0, roomId: TEST_ROOM7, count: 0, roomId: TEST_ROOM8, count: 0, roomId: TEST_ROOM9, count: 0]
+New identity message:{&quot;type&quot;:&quot;newidentity&quot;,&quot;former&quot;:&quot;&quot;,&quot;identity&quot;:&quot;Guest111&quot;}
+CLIENT: Change identity message:{&quot;type&quot;:&quot;identitychange&quot;,&quot;identity&quot;:&quot;Guest111&quot;}
+SERVER: New identity message:{&quot;type&quot;:&quot;newidentity&quot;,&quot;former&quot;:&quot;OLD_NAME_12345&quot;,&quot;identity&quot;:&quot;Guest111&quot;}
+original message:{&quot;content&quot;:&quot;Hello World!&quot;,&quot;type&quot;:&quot;chat&quot;,&quot;identity&quot;:&quot;me&quot;,&quot;room&quot;:&quot;MainH&quot;}
+transformed json:{&quot;content&quot;:&quot;Hello World!&quot;,&quot;type&quot;:&quot;chat&quot;,&quot;identity&quot;:&quot;me&quot;,&quot;room&quot;:&quot;MainH&quot;}
+original msg:{&quot;content&quot;:&quot;Hello World!&quot;,&quot;type&quot;:&quot;chat&quot;,&quot;identity&quot;:&quot;me&quot;}
+decoded msg:Hello World!
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="http://www.gradle.org">Gradle 6.0</a> at 2021-9-14 18:01:37</p>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="MessageTest" tests="14" skipped="0" failures="0" errors="0" timestamp="2021-09-14T08:01:37" hostname="DESKTOP-NALA5M3" time="0.108">
+  <properties/>
+  <testcase name="clientSendsMessage()" classname="MessageTest" time="0.014"/>
+  <testcase name="clientSendsJoinRoom()" classname="MessageTest" time="0.067"/>
+  <testcase name="clientRequestRoomList()" classname="MessageTest" time="0.014"/>
+  <testcase name="clientRequestRoomMates()" classname="MessageTest" time="0.001"/>
+  <testcase name="clientRequestDelete()" classname="MessageTest" time="0.003"/>
+  <testcase name="clientRequestRoomCreation()" classname="MessageTest" time="0.001"/>
+  <testcase name="getRoom()" classname="MessageTest" time="0.001"/>
+  <testcase name="getType()" classname="MessageTest" time="0.001"/>
+  <testcase name="serverRespondsIdentityChange()" classname="MessageTest" time="0.0"/>
+  <testcase name="getSender()" classname="MessageTest" time="0.0"/>
+  <testcase name="clientQuit()" classname="MessageTest" time="0.0"/>
+  <testcase name="clientSendsIdentityChange()" classname="MessageTest" time="0.001"/>
+  <testcase name="transformJsonTest()" classname="MessageTest" time="0.001"/>
+  <testcase name="getMessage()" classname="MessageTest" time="0.0"/>
+  <system-out><![CDATA[CLIENT: Join room message:{"type":"join","roomId":"HelloooooRoom"}
+SERVER: Join room respond:{"type":"roomchange","identity":"Guest111","former":"MainHall","roomId":"HelloooooRoom"}
+SERVER: CURRENT ROOM LIST:[roomId: TEST_ROOM0, count: 0, roomId: TEST_ROOM1, count: 1, roomId: TEST_ROOM2, count: 2, roomId: TEST_ROOM3, count: 3, roomId: TEST_ROOM4, count: 4, roomId: TEST_ROOM5, count: 5, roomId: TEST_ROOM6, count: 6, roomId: TEST_ROOM7, count: 7, roomId: TEST_ROOM8, count: 8, roomId: TEST_ROOM9, count: 9]
+CLIENT: List room message:{"type":"list"}
+SERVER: Join room respond:{"type":"roomlist","rooms":[{"roomId":"TEST_ROOM0","count":"0"},{"roomId":"TEST_ROOM1","count":"0"},{"roomId":"TEST_ROOM2","count":"0"},{"roomId":"TEST_ROOM3","count":"0"},{"roomId":"TEST_ROOM4","count":"0"},{"roomId":"TEST_ROOM5","count":"0"},{"roomId":"TEST_ROOM6","count":"0"},{"roomId":"TEST_ROOM7","count":"0"},{"roomId":"TEST_ROOM8","count":"0"},{"roomId":"TEST_ROOM9","count":"0"}]}
+[roomId: TEST_ROOM0, count: 0, roomId: TEST_ROOM1, count: 0, roomId: TEST_ROOM2, count: 0, roomId: TEST_ROOM3, count: 0, roomId: TEST_ROOM4, count: 0, roomId: TEST_ROOM5, count: 0, roomId: TEST_ROOM6, count: 0, roomId: TEST_ROOM7, count: 0, roomId: TEST_ROOM8, count: 0, roomId: TEST_ROOM9, count: 0]
+CLIENT: Delete room message:{"type":"delete","roomId":"TEST_ROOM1"}
+SERVER: CURRENT ROOM LIST:[roomId: TEST_ROOM0, count: 0, roomId: TEST_ROOM1, count: 1, roomId: TEST_ROOM2, count: 2, roomId: TEST_ROOM3, count: 3, roomId: TEST_ROOM4, count: 4, roomId: TEST_ROOM5, count: 5, roomId: TEST_ROOM6, count: 6, roomId: TEST_ROOM7, count: 7, roomId: TEST_ROOM8, count: 8, roomId: TEST_ROOM9, count: 9]
+SERVER: Join room respond:{"type":"roomlist","rooms":[{"roomId":"TEST_ROOM0","count":"0"},{"roomId":"TEST_ROOM2","count":"0"},{"roomId":"TEST_ROOM3","count":"0"},{"roomId":"TEST_ROOM4","count":"0"},{"roomId":"TEST_ROOM5","count":"0"},{"roomId":"TEST_ROOM6","count":"0"},{"roomId":"TEST_ROOM7","count":"0"},{"roomId":"TEST_ROOM8","count":"0"},{"roomId":"TEST_ROOM9","count":"0"}]}
+[roomId: TEST_ROOM0, count: 0, roomId: TEST_ROOM2, count: 0, roomId: TEST_ROOM3, count: 0, roomId: TEST_ROOM4, count: 0, roomId: TEST_ROOM5, count: 0, roomId: TEST_ROOM6, count: 0, roomId: TEST_ROOM7, count: 0, roomId: TEST_ROOM8, count: 0, roomId: TEST_ROOM9, count: 0]
+New identity message:{"type":"newidentity","former":"","identity":"Guest111"}
+CLIENT: Change identity message:{"type":"identitychange","identity":"Guest111"}
+SERVER: New identity message:{"type":"newidentity","former":"OLD_NAME_12345","identity":"Guest111"}
+original message:{"content":"Hello World!","type":"chat","identity":"me","room":"MainH"}
+transformed json:{"content":"Hello World!","type":"chat","identity":"me","room":"MainH"}
+original msg:{"content":"Hello World!","type":"chat","identity":"me"}
+decoded msg:Hello World!
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
