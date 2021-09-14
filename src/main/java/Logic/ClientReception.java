@@ -7,7 +7,13 @@ import java.util.List;
 import java.util.Map;
 
 public class ClientReception {
-
+    private static Room findRoom(List<Room> rooms, String roomId){
+        for (Room r : rooms){
+            if (r.getRoomId().equals(roomId))
+                return r;
+        }
+        return null;
+    }
     public static String newIdentity(Protocol p, String client) throws IOException {
         String former = p.getMessage().getFormer();
         String identity =p.getMessage().getIdentity();
@@ -36,15 +42,22 @@ public class ClientReception {
         List<Room> rooms =p.getMessage().getRooms();
         String response="";
         //if it is a follow-up of delete request.
-        if(request.size()!=0 && request.containsKey(Message.TYPE_DELETE)){
-            for(Room r: rooms){
-                if(request.containsValue(r.getRoomId())) {
-                    request.clear();
-                    return "Error, the room was not deleted.";
-                }
+        if(request.size()!=0){
+            String out = "";
+            if(findRoom(rooms,request.get(Message.TYPE_DELETE))!=null) {
+                out = "Error, the room "+request.get(Message.TYPE_DELETE)+" was not deleted.";
+            }
+            else if(request.containsKey(Message.TYPE_DELETE)){
+                out ="The room "+request.get(Message.TYPE_DELETE)+ " was not found or successfully deleted";
+            }
+            if(findRoom(rooms,request.get(Message.TYPE_ROOM_CREATION))!=null){
+                out = "The room "+request.get(Message.TYPE_ROOM_CREATION)+" is created";
+            }
+            else if(request.containsKey(Message.TYPE_ROOM_CREATION)){
+                out = "Error, the room "+request.get(Message.TYPE_ROOM_CREATION)+" was not created";
             }
             request.clear();
-            return "The room was not found or successfully deleted";
+            return out;
         }
         for(Room r: rooms){
             response += Message.addHeadAndTail(r.getRoomId()+", Number of people in the room:"+r.getCount(),"[","]");

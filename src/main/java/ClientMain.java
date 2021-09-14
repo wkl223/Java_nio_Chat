@@ -64,6 +64,7 @@ public class ClientMain {
                     ByteBuffer byteBuffer = ByteBuffer.allocate(1024);//1024 bytes
                     USER_INPUT_HANDLER.execute(() -> {
                         while (!Thread.currentThread().isInterrupted()) {
+                            System.out.print(prefix);
                             byteBuffer.clear();
                             String message = new Scanner(System.in).nextLine();
                             try {
@@ -109,6 +110,7 @@ public class ClientMain {
                 System.out.println("DEBUG server msg: "+message);
                 String serverRespond = processMessageAndRepresent(message,userName);
                 System.out.println(prefix+serverRespond);
+                System.out.print(prefix);// follow-up prefix as command prompt
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -142,7 +144,11 @@ public class ClientMain {
                 String formerRoom = p.getMessage().getFormer();
                 String roomId = p.getMessage().getRoomId();
                 String identity = p.getMessage().getIdentity();
-                if (!formerRoom.equals(roomId) && identity.equals(userName)) this.currentRoom = roomId;
+                if (!formerRoom.equals(roomId) && identity.equals(userName)){
+                    this.currentRoom = roomId;
+                    this.prefix = String.format("[%s]: %s> ", this.currentRoom, this.userName);
+                    System.out.println("DEBUG- new prefix: "+prefix);
+                }
                 return ClientReception.roomChange(p, client);
             }
             case Message.TYPE_ROOM_CONTENTS:

@@ -193,7 +193,11 @@ public class ServerMain {
                     Protocol temp = ServerResponds.roomChange(chatRoom,c,affectedRoom.getRoomId(),DEFAULT_ROOM);
                     //as they are changing rooms, note that it is not a formal room change message
                     //so that no follow-up message in this case. e.g., ROOM CONTENTS and ROOM LIST.
+                    singleResponse(temp,c,selector);
                     broadCast(temp, (ArrayList<String>) defaultRoom.users,selector,selectionKey);
+                    defaultRoom.users.add(c);
+                    clients.remove(c);
+                    clients.put(c,DEFAULT_ROOM);
                 }
             }
             singleResponse(answer,client,selector);
@@ -217,6 +221,7 @@ public class ServerMain {
                 affectedUser = (targetRoom.users == null)||(targetRoom.users.size()==0)? formerRoom.users:targetRoom.users;
               }
               broadCast(answer, (ArrayList<String>) affectedUser,selector,selectionKey);
+              singleResponse(answer,client,selector);
             }
             else singleResponse(answer,client,selector);
             break;

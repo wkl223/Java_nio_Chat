@@ -29,6 +29,7 @@ public class ClientResponds {
         if(command!=null){
             StringTokenizer tokenizer = new StringTokenizer(message," ");
             tokenizer.nextToken();
+            Protocol answer = null;
             String request = null;
             try {
                  request = tokenizer.nextToken();
@@ -37,7 +38,7 @@ public class ClientResponds {
                 }
             switch(command){
                 case Message.TYPE_IDENTITY_CHANGE:
-                    Protocol answer =identityChange(request);
+                    answer =identityChange(request);
                     if(answer==null) return "Requested identity invalid or inuse";
                     return answer.encodeJson();
                 case Message.TYPE_JOIN:
@@ -47,7 +48,11 @@ public class ClientResponds {
                 case Message.TYPE_LIST:
                     return list().encodeJson();
                 case Message.TYPE_ROOM_CREATION: {
-                    if (createRoom(request) == null) return "Invalid room name";
+                    answer = createRoom(request);
+                    if (answer == null) return "Invalid room name";
+                    else if(request!=null){
+                        requests.put(Message.TYPE_ROOM_CREATION,request);
+                    }
                     return createRoom(request).encodeJson();
                 }
                 case Message.TYPE_DELETE: {
