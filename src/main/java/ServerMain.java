@@ -22,8 +22,6 @@ import java.util.stream.Stream;
 public class ServerMain {
   private static final ExecutorService THREAD_POOL = Executors.newFixedThreadPool(10);
   private static final String host = "127.0.0.1";
-//  private static ConcurrentHashMap<String, ArrayList<String>> chatRoom; //<key=RoomName, value=list of clients>
-//  private static ConcurrentHashMap<String, String> roomProperty; //<key=RoomName, value=owner>
   private static List<Room> chatRoom;
   private static ConcurrentHashMap clients; //<key=clientName, value=current room>
   private static List<String> freeName = new ArrayList<String>();//
@@ -244,9 +242,23 @@ public class ServerMain {
         break;
       }
       case Message.TYPE_QUIT: {
+        //1. remove from current room
         Room affected = ServerResponds.findRoom(chatRoom, (String) clients.get(client));
         answer = ServerReception.quit(p, client, chatRoom, clients);
         affected.users.remove(client);
+        //2. remove all occupied rooms
+        for(Room r: chatRoom){
+          if(r.owner.equals(client)){
+            for(String c: r.users){
+              Protocol temp = ServerResponds.roomChange(chatRoom,c,r.getRoomId(),DEFAULT_ROOM);
+              singleResponse(temp,c,selector);
+              broadCast(temp, (ArrayList<String>) defaultRoom.users,selector,selectionKey);
+              defaultRoom.users.add(c);
+              clients.remove(c);
+              clients.put(c,DEFAULT_ROOM);
+            }
+          }
+        }
         clients.remove(client);
         broadCast(answer, (ArrayList<String>) affected.users,selector,selectionKey);
         singleResponse(answer,client,selector);
