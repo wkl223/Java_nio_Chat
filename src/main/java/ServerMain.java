@@ -16,8 +16,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class ServerMain {
   private ThreadPool pool = new ThreadPool(10);
@@ -58,6 +56,7 @@ public class ServerMain {
   private synchronized void singleResponse(Protocol message, String name, Selector selector) throws IOException {
     ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
     byteBuffer.put(message.encodeJson().getBytes(StandardCharsets.UTF_8));
+    System.out.println("DEBUG - Single response: "+message.encodeJson());
     byteBuffer.flip();
     SocketChannel socketChannel = (SocketChannel) getKey(selector,name).channel();
     while (byteBuffer.hasRemaining()) {
@@ -76,6 +75,7 @@ public class ServerMain {
     byteBuffer.mark();// because we need to send this multiple times.
     Set<SelectionKey> keys = selector.keys();
     System.out.println("DEBUG - broadcast to users:"+multicastList.toString());
+    System.out.println("broadcast message:"+message.encodeJson());
     for(SelectionKey k : keys){
       //ignore the sender + server itself
       if(selectionKey.equals(k) || !(k.channel() instanceof SocketChannel)){
@@ -166,6 +166,10 @@ public class ServerMain {
           String message = String.valueOf(StandardCharsets.UTF_8.decode(b));
           String client = (String)selectionKey.attachment();
           System.out.println("DEBUG: received client message: " + message+" from client:"+client);
+          if(message.equals("")||message.equals(" ")){
+            System.out.println("Received empty message, connection abort.");
+            throw new IOException();
+          }
           WorkerThread worker;
           do{
             worker = pool.getWorker();
@@ -272,10 +276,6 @@ public class ServerMain {
         case Message.TYPE_JOIN: {
           Room formerRoom = ServerResponds.findRoom(chatRoom, (String) clients.get(client));
           answer = ServerReception.joinRoom(p, client, clients, chatRoom);
-          if (answer.getMessage().getRoomId().equals(DEFAULT_ROOM) && !answer.getMessage().getFormer().equals(DEFAULT_ROOM)) {
-            singleResponse(ServerResponds.roomContents(DEFAULT_ROOM, chatRoom), client, selector);
-            singleResponse(ServerResponds.roomList(chatRoom), client, selector);
-          }
           if(answer.getMessage().isSuccessed()){
             Room targetRoom = ServerResponds.findRoom(chatRoom,p.getMessage().getRoomId());
             List<String> affectedUser;
@@ -288,9 +288,15 @@ public class ServerMain {
             }
             broadCast(answer, (ArrayList<String>) affectedUser,selector,selectionKey);
             //finally, delete room if the room has no owner and no users.
-            if(formerRoom.users.size()==0 && formerRoom.owner.equals(Message.EMPTY)) chatRoom.remove(formerRoom);
+            if((!formerRoom.getRoomId().equals(DEFAULT_ROOM))&&formerRoom.getCount().equals("0") && formerRoom.owner.equals(Message.EMPTY)){
+              chatRoom.remove(formerRoom);
+            }
           }
           singleResponse(answer,client,selector);
+          if (answer.getMessage().getRoomId().equals(DEFAULT_ROOM) && !answer.getMessage().getFormer().equals(DEFAULT_ROOM)) {
+            singleResponse(ServerResponds.roomContents(DEFAULT_ROOM, chatRoom), client, selector);
+            singleResponse(ServerResponds.roomList(chatRoom), client, selector);
+          }
           break;
         }
         case Message.TYPE_IDENTITY_CHANGE: {
