@@ -31,15 +31,17 @@ public class ServerMain {
   public static void main(String[] args) {
     int port =4444;//default to port 4444
     try{
-      if (args.length>2){
+      if(args.length==0){
+        new ServerMain().handle(port);
+      }
+      else if (args.length==2&&args[0].equals("-p")) {
+        port = Integer.parseInt(args[1]);
+        new ServerMain().handle(port);
+      }
+      else
         throw new NumberFormatException();
-      }
-      else if (args.length==1) {
-        port = Integer.parseInt(args[0]);
-      }
-      new ServerMain().handle(port);
     } catch (NumberFormatException e) {
-      System.err.println("Invalid argument input, example:java -jar chatserver.jar <port>");
+      System.err.println("Invalid argument input, example:java -jar chatserver.jar <-p port>");
     }
   }
 

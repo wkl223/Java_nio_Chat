@@ -20,6 +20,8 @@ dependencies {
 
     //Jackson
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.5'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.12.5'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.12.5'
     // and a dependency on vert.x
     implementation 'io.vertx:vertx-core:3.5.3'
 }
@@ -30,5 +32,15 @@ test {
 
 application {
     // Define the main class for the application.
-    mainClassName = 'ServerMain'
+    mainClassName = 'ClientMain'
 }
+jar {
+    manifest {
+        attributes "Main-Class": "ClientMain"
+    }
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+

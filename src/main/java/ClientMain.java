@@ -19,8 +19,8 @@ import java.util.concurrent.Executors;
 public class ClientMain {
     private static final ExecutorService USER_INPUT_HANDLER = Executors.newSingleThreadExecutor();
     public static final String DEFAULT_ROOM = "MainHall";
-    public static final int port = 4456;
-    public static final String host = "127.0.0.1";
+    public static int port = 4444;
+    public static String host = "127.0.0.1";
 
     private String userName;
     private String currentRoom;
@@ -128,8 +128,24 @@ public class ClientMain {
 
 
     public static void main(String[] args) {
-        ClientMain client = new ClientMain();
-        client.handle();
+        try{
+            if (args.length==3&&args[1].equals("-p")) {
+                port = Integer.parseInt(args[2]);
+                host = args[0];
+                ClientMain client = new ClientMain();
+                client.handle();
+            }
+            else if(args.length==1){
+                host = args[0];
+                ClientMain client = new ClientMain();
+                client.handle();
+            }
+            else{
+                throw new NumberFormatException();
+            }
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid argument input, example:java -jar chatclient.jar hostname <-p port>");
+        }
     }
     public String processMessageAndRepresent(String message, String name) throws IOException {
         Protocol p = new Protocol(message);
