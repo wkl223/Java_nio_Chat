@@ -174,7 +174,7 @@ public class ServerMain {
           do{
             worker = pool.getWorker();
           }while(worker == null);
-          worker.processMessageAndRespond(message,client,selector,selectionKey);
+          worker.serviceChannel(message,client,selector,selectionKey);
           b.clear();
         } catch (IOException e) {
           //something wrong with the client. treat it as quit
@@ -225,6 +225,8 @@ public class ServerMain {
     private ThreadPool pool;
     private SelectionKey selectionKey;
     private Selector selector;
+    private String message;
+    private String client;
 
     WorkerThread(ThreadPool pool) {
       this.pool = pool;
@@ -238,14 +240,24 @@ public class ServerMain {
         } catch (InterruptedException e) {
           this.interrupted();
         }
-        if (selectionKey == null) {
-          continue; // just in case
-        }
         System.out.println(this.getName() + " has been awakened");
+        try {
+          processMessageAndRespond(message, client, selector,selectionKey);
+        } catch (IOException e) {
+        }
         this.pool.returnWorker(this);
       }
     }
+    synchronized void serviceChannel(String message, String client, Selector selector,SelectionKey selectionKey) {
+      this.selectionKey=selectionKey;
+      this.selector=selector;
+      this.message=message;
+      this.client=client;
+      this.notify(); // Awaken the thread
+    }
     public synchronized void processMessageAndRespond(String message, String client, Selector selector,SelectionKey selectionKey) throws IOException {
+      this.selectionKey=selectionKey;
+      this.selector=selector;
       Protocol p = new Protocol(message);
       Protocol answer = null;
       List<String> affectedClients = null;
@@ -291,12 +303,12 @@ public class ServerMain {
             if((!formerRoom.getRoomId().equals(DEFAULT_ROOM))&&formerRoom.getCount().equals("0") && formerRoom.owner.equals(Message.EMPTY)){
               chatRoom.remove(formerRoom);
             }
+            if (answer.getMessage().getRoomId().equals(DEFAULT_ROOM) && !answer.getMessage().getFormer().equals(DEFAULT_ROOM)) {
+              singleResponse(ServerResponds.roomContents(DEFAULT_ROOM, chatRoom), client, selector);
+              singleResponse(ServerResponds.roomList(chatRoom), client, selector);
+            }
           }
           singleResponse(answer,client,selector);
-          if (answer.getMessage().getRoomId().equals(DEFAULT_ROOM) && !answer.getMessage().getFormer().equals(DEFAULT_ROOM)) {
-            singleResponse(ServerResponds.roomContents(DEFAULT_ROOM, chatRoom), client, selector);
-            singleResponse(ServerResponds.roomList(chatRoom), client, selector);
-          }
           break;
         }
         case Message.TYPE_IDENTITY_CHANGE: {
@@ -352,8 +364,6 @@ public class ServerMain {
         }
         case Message.TYPE_MESSAGE: {
           Room affected = ServerResponds.findRoom(chatRoom, (String) clients.get(client));
-          System.out.println(client);
-          System.out.println((String) clients.get(client));
           answer = ServerReception.message(p, client);
           broadCast(answer, (ArrayList<String>) affected.users,selector,selectionKey);
           break;
