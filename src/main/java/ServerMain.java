@@ -132,67 +132,78 @@ public class ServerMain {
   }
   private void selectionKeyHandler(SelectionKey selectionKey, Selector selector) throws IOException {
     // if a connection event
-    if (selectionKey.isAcceptable()){
-      try{
-        SocketChannel socketChannel = ((ServerSocketChannel)selectionKey.channel()).accept();
-        if(socketChannel!=null) {
-          System.out.println("DEBUG: client connection established: " + socketChannel.socket().getPort());
-          //set unblocking mode
-          socketChannel.configureBlocking(false);
-          // register the client to the selector for event monitoring. attach Username.
-          Protocol respond = ServerResponds.newIdentity(clients,freeName, ServerResponds.NEW_USER, ServerResponds.NEW_USER);
-          String clientName = respond.getMessage().getIdentity();
-          SelectionKey clientKey = socketChannel.register(selector, SelectionKey.OP_READ, clientName);
-          // add to default room, and add client to the clients name collection.
-          clients.put(clientName,DEFAULT_ROOM);
-          chatRoom.get(0).users.add(clientName);
-          // new identity assignment
-          singleResponse(respond, clientName, selector);
-        }
-      }catch(IOException e){
-        e.printStackTrace();
-      }catch(Exception e){};//just in case
-    }
-    // otherwise, it is something the server can read.
-    else if (selectionKey.isReadable()){
-      SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
-      if(socketChannel != null) {
-        ByteBuffer b = ByteBuffer.allocate(1024); //1024 byte per read
+    try {
+      if (selectionKey.isAcceptable()) {
         try {
-          // while not reach to EOF
-          while (socketChannel.read(b) > 0) {
+          SocketChannel socketChannel = ((ServerSocketChannel) selectionKey.channel()).accept();
+          if (socketChannel != null) {
+            System.out.println("DEBUG: client connection established: " + socketChannel.socket().getPort());
+            //set unblocking mode
+            socketChannel.configureBlocking(false);
+            // register the client to the selector for event monitoring. attach Username.
+            Protocol respond = ServerResponds.newIdentity(clients, freeName, ServerResponds.NEW_USER, ServerResponds.NEW_USER);
+            Protocol roomList = ServerResponds.roomList(chatRoom);
+            Protocol roomContent = ServerResponds.roomContents(DEFAULT_ROOM, chatRoom);
+            String clientName = respond.getMessage().getIdentity();
+            Protocol roomChange = ServerResponds.roomChange(chatRoom, clientName, ServerResponds.NEW_USER, DEFAULT_ROOM);
+            SelectionKey clientKey = socketChannel.register(selector, SelectionKey.OP_READ, clientName);
+            // add to default room, and add client to the clients name collection.
+            clients.put(clientName, DEFAULT_ROOM);
+            chatRoom.get(0).users.add(clientName);
+            // new identity assignment
+            singleResponse(respond, clientName, selector);
+            singleResponse(roomList, clientName, selector);
+            singleResponse(roomContent, clientName, selector);
+            singleResponse(roomChange, clientName, selector);
           }
-          b.flip(); //reset the cursor at 0.
-          String message = String.valueOf(StandardCharsets.UTF_8.decode(b));
-          String client = (String)selectionKey.attachment();
-          System.out.println("DEBUG: received client message: " + message+" from client:"+client);
-          if(message.equals("")||message.equals(" ")){
-            System.out.println("Received empty message, connection abort.");
-            throw new IOException();
-          }
-          WorkerThread worker;
-          do{
-            worker = pool.getWorker();
-          }while(worker == null);
-          worker.serviceChannel(message,client,selector,selectionKey);
-          b.clear();
         } catch (IOException e) {
-          //something wrong with the client. treat it as quit
-          Message m = new Message();
-          m.setType(Message.TYPE_QUIT);
-          m.setSuccessed(true);
-          Protocol p = new Protocol(m);
-          try {
-            WorkerThread worker;
-            do{
-              worker = pool.getWorker();
-            }while(worker == null);
-            worker.processMessageAndRespond(p.encodeJson(), (String) selectionKey.attachment(),selector,selectionKey);
-          } catch (IOException ex) {
-          }
-        }catch(Exception e){};//just in case
+          e.printStackTrace();
+        } catch (Exception e) {
+        }
+        ;//just in case
       }
-    }
+      // otherwise, it is something the server can read.
+      else if (selectionKey.isReadable()) {
+        SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
+        if (socketChannel != null) {
+          ByteBuffer b = ByteBuffer.allocate(1024); //1024 byte per read
+          try {
+            // while not reach to EOF
+            while (socketChannel.read(b) > 0) {
+            }
+            b.flip(); //reset the cursor at 0.
+            String message = String.valueOf(StandardCharsets.UTF_8.decode(b));
+            String client = (String) selectionKey.attachment();
+            System.out.println("DEBUG: received client message: " + message + " from client:" + client);
+            if (message.equals("") || message.equals(" ")) {
+              System.out.println("Received empty message, connection abort.");
+              throw new IOException();
+            }
+            WorkerThread worker;
+            do {
+              worker = pool.getWorker();
+            } while (worker == null);
+            worker.serviceChannel(message, client, selector, selectionKey);
+            b.clear();
+          } catch (IOException e) {
+            //something wrong with the client. treat it as quit
+            Message m = new Message();
+            m.setType(Message.TYPE_QUIT);
+            m.setSuccessed(true);
+            Protocol p = new Protocol(m);
+            try {
+              WorkerThread worker;
+              do {
+                worker = pool.getWorker();
+              } while (worker == null);
+              worker.processMessageAndRespond(p.encodeJson(), (String) selectionKey.attachment(), selector, selectionKey);
+            } catch (IOException ex) {
+            }
+          } catch (Exception e) {
+          }//just in case
+        }
+      }
+    }catch (Exception e){}//just in case
   }
   class ThreadPool {
     List idle = new LinkedList();
@@ -312,13 +323,16 @@ public class ServerMain {
           break;
         }
         case Message.TYPE_IDENTITY_CHANGE: {
-          Room affected = ServerResponds.findRoom(chatRoom, (String) clients.get(client));
+//          Room affected = ServerResponds.findRoom(chatRoom, (String) clients.get(client));
           answer = ServerReception.identityChange(p, client, clients, freeName, chatRoom);
           String name = client;
           if(answer.getMessage().isSuccessed()){
-            broadCast(answer, (ArrayList<String>) affected.users,selector,selectionKey);
+            for(Room r: chatRoom) {
+              broadCast(answer, (ArrayList<String>) r.users, selector, selectionKey);
+            }
             getKey(selector,answer.getMessage().getFormer()).attach(answer.getMessage().getIdentity());
             name = answer.getMessage().getIdentity();
+            if(client.matches("Guest[0-9]+")) freeName.add(client);
           }
           singleResponse(answer,name,selector);
           break;
@@ -331,6 +345,8 @@ public class ServerMain {
         case Message.TYPE_QUIT: {
           //1. remove from current room
           Room affected = ServerResponds.findRoom(chatRoom, (String) clients.get(client));
+          //1.a special case where client respond empty message because of close()
+          if(affected == null) return;
           answer = ServerReception.quit(p, client, chatRoom, clients);
           affected.users.remove(client);
           //2. remove all occupied rooms

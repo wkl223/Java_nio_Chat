@@ -56,7 +56,7 @@ public class ClientMain {
         }
     }
 
-    private void selectionKeyHandler(SelectionKey selectionKey, Selector selector) {
+    private synchronized void selectionKeyHandler(SelectionKey selectionKey, Selector selector) {
         if (selectionKey.isConnectable()) {
             SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
             try {
@@ -113,12 +113,16 @@ public class ClientMain {
                 String message = String.valueOf(StandardCharsets.UTF_8.decode(b));
                 b.clear();
 //                System.out.println("DEBUG server msg: "+message);
-                String serverRespond = processMessageAndRepresent(message,userName);
-                if(serverRespond.equals(Message.OK)&&request.containsKey(Message.TYPE_QUIT)){
-                    quit();
+                //possible that server send lots of Json at once (i.e. at client startup)
+                String[] strings = message.split("(?<=\\})(?=\\{\"type\")");
+                for(String s: strings){
+                    String serverRespond = processMessageAndRepresent(s,userName);
+                    if(serverRespond.equals(Message.OK)&&request.containsKey(Message.TYPE_QUIT)){
+                        quit();
+                    }
+                    System.out.print("\n"+serverRespond);
                 }
-                System.out.println(serverRespond);
-                System.out.print(prefix);// follow-up prefix as command prompt
+                System.out.print("\n"+prefix);// follow-up prefix as command prompt
             } catch (IOException e) {
                 System.out.println("Error - Something wrong in server message, program terminated!");
                 System.exit(-1);

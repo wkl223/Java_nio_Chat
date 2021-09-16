@@ -30,6 +30,7 @@ public class ClientReception {
         if(formerRoom.equals(roomId)) return "The requested room is invalid or non existent.";
         if (roomId.equals(Message.EMPTY) && clientName.equals(identity) && request.containsKey(Message.TYPE_QUIT)) return Message.OK;
         if (roomId.equals(Message.EMPTY)) return identity+" has left";
+        if (formerRoom.equals(Message.EMPTY)) return identity+" moves to "+roomId;
         return identity+" moved from "+formerRoom+" to "+roomId;
     }
     public static String roomContents(Protocol p) throws IOException{
@@ -74,7 +75,7 @@ public class ClientReception {
     public static String message(Protocol p) throws IOException{
         String identity = p.getMessage().getIdentity();
         String content = p.getMessage().getContent();
-        return Message.addHeadAndTail(identity,"From server, by [","]")+": "+content;
+        return Message.addHeadAndTail(identity,"[","]")+": "+content;
     }
 
 }
